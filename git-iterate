@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Iterate over all the commits in the current branch of a repo
+# This script should be placed and run from outside the repo
+# Usage: ./git-iterate <repo-path> <temp-work-dir> <output-file>
+#
+# repo-path:     relative path to dir of repo
+# temp-work-dir: temporary work dir/tree to use
+#                MUST BE DIFFERENT THAN ALL CURRENT BRANCH NAMES
+# output-file:   output file to redirect results to
+
+if [[ $# -ne 3 ]]; then
+    echo "usage: ./git-iterate <repo-path> <temp-work-dir> <output-file>"
+    exit 2
+fi
+
+# create a new work dir/tree based on the repo's HEAD, in the same dir as the script
+# this also creates and checks out a new branch with the same name as the work dir/tree
+# this stuff is FOR SAFETY!!!
+git --git-dir=$1/.git worktree add $2
+
+# get a list of all commits, omitting merges
+COMMITS=$(git -C $2 rev-list --no-merges --reverse HEAD)
+
+for COMMIT in $COMMITS
+do
+    # checkout the commit
+    git -C $2 checkout -q $COMMIT
+
+    # collect the commit metadata
+    git -C $2 log -n 1 --pretty=format:"Commit: %H%nAuthor: %an <%ae>%nDate:   %ad%n%n" >> $3
+
+    # call the scripts to insert the memory instrumentation and run the tests
+    # NOTE: these scripts might need arg $2 as well, since that's the work dir with the files
+    # ./memory.sh
+    # ./teststuff.sh >> $3
+
+    # clean up the files back to the original commit state before switching
+    git -C $2 checkout -q .
+done
+
+# clean up the temporary work dir/tree and branch
+git -C $1 worktree remove $2
+git -C $1 branch -D $2
