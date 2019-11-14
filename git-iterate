@@ -2,43 +2,47 @@
 
 # Iterate over all the commits in the current branch of a repo
 # This script should be placed and run from outside the repo
-# Usage: ./git-iterate <repo-path> <temp-work-dir> <output-file>
+# Usage: ./git-iterate <repo-path> <output-file>
 #
 # repo-path:     relative path to dir of repo
-# temp-work-dir: temporary work dir/tree to use
-#                MUST BE DIFFERENT THAN ALL CURRENT BRANCH NAMES
 # output-file:   output file to redirect results to
+#
+# E.g.: ./git-iterate ./testrepo ./output.txt
+#       Would run the script on a repo named testrepo and
+#       output the results to a file called output.txt
 
-if [[ $# -ne 3 ]]; then
-    echo "usage: ./git-iterate <repo-path> <temp-work-dir> <output-file>"
+if [[ $# -ne 2 ]]; then
+    echo "usage: ./git-iterate <repo-path> <output-file>"
     exit 2
 fi
+
+TEMP_DIR=temp-work-dir
 
 # create a new work dir/tree based on the repo's HEAD, in the same dir as the script
 # this also creates and checks out a new branch with the same name as the work dir/tree
 # this stuff is FOR SAFETY!!!
-git --git-dir=$1/.git worktree add $2
+git --git-dir=$1/.git worktree add $TEMP_DIR
 
 # get a list of all commits, omitting merges
-COMMITS=$(git -C $2 rev-list --no-merges --reverse HEAD)
+COMMITS=$(git -C $TEMP_DIR rev-list --no-merges --reverse HEAD)
 
 for COMMIT in $COMMITS
 do
     # checkout the commit
-    git -C $2 checkout -q $COMMIT
+    git -C $TEMP_DIR checkout -q $COMMIT
 
     # collect the commit metadata
-    git -C $2 log -n 1 --pretty=format:"Commit: %H%nAuthor: %an <%ae>%nDate:   %ad%n%n" >> $3
+    git -C $TEMP_DIR log -n 1 --pretty=format:"Commit: %H%nAuthor: %an <%ae>%nDate:   %ad%n%n" >> $2
 
     # call the scripts to insert the memory instrumentation and run the tests
-    # NOTE: these scripts might need arg $2 as well, since that's the work dir with the files
+    # NOTE: these scripts might need arg $TEMP_DIR as well, since that's the work dir with the files
     # ./memory.sh
-    # ./teststuff.sh >> $3
+    # ./teststuff.sh >> $2
 
     # clean up the files back to the original commit state before switching
-    git -C $2 checkout -q .
+    git -C $TEMP_DIR checkout -q .
 done
 
 # clean up the temporary work dir/tree and branch
-git -C $1 worktree remove $2
-git -C $1 branch -D $2
+git -C $1 worktree remove $TEMP_DIR
+git -C $1 branch -D $TEMP_DIR
