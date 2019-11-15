@@ -39,6 +39,9 @@ do
     # ./memory.sh
     # ./teststuff.sh >> $2
 
+    # output test coverage of commit to file
+    bash ./get-coverage $TEMP_DIR 2>&1 | tee -a $2
+  
     # clean up the files back to the original commit state before switching
     git -C $TEMP_DIR checkout -q .
 done
