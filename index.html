@@ -6,10 +6,7 @@
     <title>Test Coverage versus Commit</title>
     <script src="https://d3js.org/d3.v4.min.js" charset="utf-8"></script>
     <style type="text/css">
-
-
     </style>
-
 </head>
 
 <body>
@@ -21,30 +18,47 @@
 
         // 2. Create SVG - Scalable Vector Graphics
         // NOTE: Can add more svgs for multiple graphs displayed
-        var height = 500;
-        var width = 1000;
-        var barWifth = 35;
-        var barOffset = 5;
+        var width = 1000
+            height = 500
 
-        var stackedBarChartSVG = d3.select("svg").append("svg")
+        var stackedBarChartSVG = d3.select("body").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         // 3. Set axis scales for x and y - https://www.dashingd3js.com/d3js-axes
-        var xAxisScale = d3.scaleBand().rangeRound[(0, width)];
-        var yAxisScale = d3.scaleLinear().rangeRound([height, 0]);
+        var xScale = d3.scaleBand().rangeRound([0, width])
+        var yScale = d3.scaleLinear().rangeRound([height, 0]);
+        var xAxis = d3.axisBottom(xScale);
+        var yAxis = d3.axisLeft(yScale);
 
         // 4. Set colours of the bars
         var colours = ["#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78"];
-        var barColours = d3.scaleOrdinal().range(colours);
+        var z = d3.scaleOrdinal()
+            .range(colours);
 
-        // 5. Load Data: http://learnjsdata.com/read_data.html
-        var myData = d3.csv("viz-test-data/CoverageStackedBarChart.csv", function (data) {
-            for (var i = 0; i < data.length; i++) {
-                console.log(data[i]);
-            }
+        // 5. Load Data: https://d3-wiki.readthedocs.io/zh_CN/master/CSV/
+        d3.csv("viz-test-data/CoverageStackedBarChart.csv", function (d) {
+            return {
+                commit: +d.Commit,
+                branch: +d["Branch Coverage %"],
+                statement: +d["Statement Coverage %"],
+                line: +d["Line Coverage %"]
+            };
+        }, function (error, rows) {
+            console.log(rows);
+            // Do the rest of the chart rendering here
+
+            // 6. Render the x and y axis.
+            stackedBarChartSVG.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            stackedBarChartSVG.append("g")
+                .attr("class", "y axis")
+                .call(yAxis); 
         });
 
     </script>
