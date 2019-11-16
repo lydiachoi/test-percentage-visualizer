@@ -32,18 +32,23 @@ do
     git -C $TEMP_DIR checkout -q $COMMIT
 
     # collect the commit metadata
-    git -C $TEMP_DIR log -n 1 --pretty=format:"Commit: %H%nAuthor: %an <%ae>%nDate:   %ad%n%n" >> $2
+    git -C $TEMP_DIR log -n 1 --pretty=format:"Commit: %H%nAuthor: %an <%ae>%nDate:   %ad%n%n" | tee -a $2
 
-    # call the scripts to insert the memory instrumentation and run the tests
-    # NOTE: these scripts might need arg $TEMP_DIR as well, since that's the work dir with the files
-    # ./memory.sh
-    # ./teststuff.sh >> $2
-
-    # output test coverage of commit to file
-    bash ./get-coverage $TEMP_DIR 2>&1 | tee -a $2
-  
-    # clean up the files back to the original commit state before switching
-    git -C $TEMP_DIR checkout -q .
+    # check that there are any test files to run
+    TEST_COUNT=$(find $TEMP_DIR -not -path '*/node_modules/*' -type f \( -name '*.test.js' -o -name '*.spec.ts' \) | wc -l)
+    if [[ $TEST_COUNT -ne 0 ]]; then
+        # run any scripts that need to be run on tests in here
+        # NOTE: these scripts might need arg $TEMP_DIR as well, since that's the work dir with the files
+        
+        # output test coverage of commit to file
+        bash ./get-coverage $TEMP_DIR 2>&1 | tee -a $2
+    
+        # clean up the files back to the original commit state before switching
+        git -C $TEMP_DIR checkout -q .
+    else
+        # output that this commit had no tests to file
+        echo "This commit has no tests" | tee -a $2
+    fi
 done
 
 # clean up the temporary work dir/tree and branch
