@@ -24,7 +24,9 @@ TEMP_DIR=temp-work-dir
 git --git-dir=$1/.git worktree add $TEMP_DIR
 
 # get a list of all commits, omitting merges
-COMMITS=$(git -C $TEMP_DIR rev-list --no-merges --reverse HEAD)
+COMMITS=$(git -C $TEMP_DIR rev-list --no-merges --reverse HEAD) # add --max-count=<num>to limit commits to given number; for testing only. 
+
+:> $2 # clears the file before writing to it
 
 for COMMIT in $COMMITS
 do
@@ -40,8 +42,10 @@ do
         # run any scripts that need to be run on tests in here
         # NOTE: these scripts might need arg $TEMP_DIR as well, since that's the work dir with the files
         
-        # output test coverage of commit to file
-        bash ./get-coverage $TEMP_DIR 2>&1 | tee -a $2
+        # runs yarn install 
+        bash ./test-setup $TEMP_DIR
+        # output test coverage and memory usage information of commit to file
+        bash ./get-coverage-and-memory $TEMP_DIR 2>&1 | tee -a $2
     
         # clean up the files back to the original commit state before switching
         git -C $TEMP_DIR checkout -q .
