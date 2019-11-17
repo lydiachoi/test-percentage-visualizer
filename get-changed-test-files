@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Rule: new tests that were added 
+# Usage: ./get-changed-test-files <repo-path>
+# repo-path:     relative path to dir of repo
+#
+# E.g.: ./get-changed-test-files ./test-repo
+
+# find command must be on one line, simply add, do not edit into multi-lines
+find $1 -name 'package.json' -not -path "*node_modules*" -execdir yarn test --changedFilesWithAncestor --watchAll=false \;

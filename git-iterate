@@ -27,6 +27,10 @@ git --git-dir=$1/.git worktree add $TEMP_DIR
 COMMITS=$(git -C $TEMP_DIR rev-list --no-merges --reverse HEAD) # add --max-count=<num>to limit commits to given number; for testing only. 
 
 :> $2 # clears the file before writing to it
+:> changedTestFiles.txt
+
+# runs yarn install 
+bash ./test-setup $TEMP_DIR 
 
 for COMMIT in $COMMITS
 do
@@ -34,7 +38,7 @@ do
     git -C $TEMP_DIR checkout -q $COMMIT
 
     # collect the commit metadata
-    git -C $TEMP_DIR log -n 1 --pretty=format:"Commit: %H%nAuthor: %an <%ae>%nDate:   %ad%n%n" | tee -a $2
+    git -C $TEMP_DIR log -n 1 --pretty=format:"Commit: %H%nAuthor: %an <%ae>%nDate:   %ad%n%n" | tee -a $2  | tee -a changedTestFiles.txt
 
     # check that there are any test files to run
     TEST_COUNT=$(find $TEMP_DIR -not -path '*/node_modules/*' -type f \( -name '*.test.js' -o -name '*.spec.ts' \) | wc -l)
@@ -42,16 +46,15 @@ do
         # run any scripts that need to be run on tests in here
         # NOTE: these scripts might need arg $TEMP_DIR as well, since that's the work dir with the files
         
-        # runs yarn install 
-        bash ./test-setup $TEMP_DIR
         # output test coverage and memory usage information of commit to file
         bash ./get-coverage-and-memory $TEMP_DIR 2>&1 | tee -a $2
-    
+        bash ./get-changed-test-files $TEMP_DIR 2>&1 | tee -a changedTestFiles.txt
+
         # clean up the files back to the original commit state before switching
         git -C $TEMP_DIR checkout -q .
     else
         # output that this commit had no tests to file
-        echo "This commit has no tests" | tee -a $2
+        echo "This commit has no tests" | tee -a $2 | tee -a changedTestFiles.txt
     fi
 done
 

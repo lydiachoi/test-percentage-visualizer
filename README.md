@@ -1,5 +1,5 @@
 # test-percentage-visualizer
-Visualizer tool to display testing related information per commits
+Visualizer tool to display testing related information per commits. The tool currently only works with JavaScript repos using Jest.
 
 # Visualizer Setup & Tool Usage
 1. Clone the repo
