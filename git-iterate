@@ -54,3 +54,6 @@ done
 # clean up the temporary work dir/tree and branch
 git -C $1 worktree remove $TEMP_DIR
 git -C $1 branch -D $TEMP_DIR
+
+awk -f coverage-parser.awk $2 >> ./data/raw/coverage-data.csv
+awk -f format.awk ./data/raw/coverage-data.csv >> ./data/coverage.csv
