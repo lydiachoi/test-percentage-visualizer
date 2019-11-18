@@ -8,5 +8,5 @@
 #
 # E.g.: ./get-coverage ./test-repo
 
-find $1 -name 'package.json' -not -path "*node_modules*" -execdir yarn install \; -execdir yarn test --coverage --watchAll=false \;
+find $1 -name 'package.json' -not -path "*node_modules*" -execdir yarn install \; -execdir yarn test --coverage --watchAll=false --coverageReporters=text-summary \;
 
