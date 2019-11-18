@@ -36,10 +36,12 @@
 
         // Sets the actual scaling of the bars with regards to x-axis
         var xBar = d3.scale.ordinal().rangeRoundBands([0, width], .2);
-
         // Sets the scaling of the full x-axis chart
         var xChart = d3.scale.ordinal();
+        // Sets the scaling of the full y-axis chart
         var y = d3.scale.linear().range([height, 0]);
+        
+        // Sets both the axis orientation (where to render them)
         var xAxis = d3.svg.axis().scale(xBar).orient("bottom");
         var yAxis = d3.svg.axis().scale(y).orient("left");
 
@@ -84,32 +86,59 @@
             // 11. Formats the title for the label on the y-axis
             svg.append("g")
                 .append("text")
+                .attr("y", 15)
                 .attr("transform", "rotate(-90)")
-                .attr("y", 6)
-                .attr("dy", ".71em")
                 .style("text-anchor", "end")
                 .text("Coverage %");
 
             // 12. Renders Data in our dataset, with DOM elements being mapped.
             // https://riptutorial.com/d3-js/example/16948/the-role-of-placeholders-in--enter--selections
-            var commit = svg.selectAll(".commit")
+            var bars = svg.selectAll(".bars")
                 .data(data)
                 .enter().append("g")
                 .attr("class", "g")
                 .attr("transform", function (d) { return "translate(" + xBar(d.Commit) + ",0)"; });
 
-            // 13. Optional - Graph animations: https://medium.com/swlh/d3-animated-bar-chart-ede2a10709b                   
-            commit.selectAll("rect")
+            // Optional - Graph animations: https://medium.com/swlh/d3-animated-bar-chart-ede2a10709b 
+            // Optional - Tooltips: https://www.d3-graph-gallery.com/graph/interactivity_tooltip.html
+            // Optional - More tooltips: https://chartio.com/resources/tutorials/how-to-show-data-on-mouseover-in-d3js/   
+            var div = d3.select('body').append('div')
+                .style('position', "absolute")
+                .style('text-align', "center")
+                .style('font', "helvetica")
+                .style('border-radius', "5px")
+                .style('padding', "5px")
+                .style('background', "#000000")
+                .style('color', "#ffffff")
+                .style('text-align', "center")
+                .style('margin-top', "10px")
+                .style('display', 'none')
+                .style('pointer-events', 'none');
+
+            bars.selectAll("rect")
                 .data(function (d) { return d.coverage; })
                 .enter().append("rect")
                 .attr("width", xChart.rangeBand())
                 .attr("x", function (d) { return xChart(d.type); })
                 .attr("y", function (d) { return y(0); })
                 .attr("height", function (d) { return height - y(0); })
-                .style("fill", function (d) { return color(d.type); });
+                .style("fill", function (d) { return color(d.type); })
+                .on('mouseover', function mouseover() {
+                    div.style('display', 'inline');
+                })
+                .on('mousemove', function mousemove() {
+                    var d = d3.select(this).data()[0]
+                    div
+                        .html(d.type + '</br>' + d.value)
+                        .style('left', (d3.event.pageX) + 'px')
+                        .style('top', (d3.event.pageY) + 'px');
+                })
+                .on('mouseout', function mouseout() {
+                    div.style('display', 'none');
+                });
 
             // This controls the animation delay using .transition() along the y-axis
-            commit.selectAll("rect")
+            bars.selectAll("rect")
                 .transition()
                 .delay(500)
                 .duration(1000)
