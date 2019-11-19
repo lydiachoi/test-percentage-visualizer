@@ -10,9 +10,9 @@
         // NOTE, this is now using D3 v4!!
         // Could refactor this to make it more programmatic
         // 1. Set Margins: Recommended by one of the creators of D3 - https://bl.ocks.org/mbostock/3019563
-        var margin = { top: 20, right: 20, bottom: 30, left: 40 };
-        var width = 500 - margin.left - margin.right;
-        var height = 960 - margin.top - margin.bottom;
+        var margin = { top: 20, right: 130, bottom: 30, left: 40 };
+        var width = 960 - margin.left - margin.right;
+        var height = 1200 - margin.top - margin.bottom;
 
         // 2. Create SVG - Scalable Vector Graphics
         // NOTE: Can add more svgs for multiple graphs displayed
@@ -26,7 +26,7 @@
         var x = d3.scaleLinear().rangeRound([0, width]);
         // Sets the scaling of the full y-axis chart
         var y = d3.scaleBand().rangeRound([0, height]).padding(0.1);
-        var colours = ["#b0c4de","#d8d8d8"];
+        var colours = ["#b0c4de", "#d8d8d8"];
         var color = d3.scaleOrdinal().range(colours);
 
         // 3. Load Data: https://d3-wiki.readthedocs.io/zh_CN/master/CSV/
@@ -58,6 +58,16 @@
                 .attr("class", "axis x_axis")
                 .attr("transform", "translate(0," + height + ")")
                 .call(d3.axisBottom(x));
+
+            svg.append("g")
+                .append("text")
+                .attr("x", width / 2)
+                .attr("y", height + 30)
+                .attr("transform", "rotate(0)")
+                .style('font', "9px sans-serif")
+                .style("font-weight", "bold")
+                .style("text-anchor", "end")
+                .text("Number of Tests");
 
             // 8. Renders the y-axis
             svg.append("g")
@@ -146,16 +156,16 @@
                 .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
 
             legend.append("rect")
-                .attr("x", width)
+                .attr("x", width + 110)
                 .attr("width", 18)
                 .attr("height", 18)
                 .style("fill", color);
-                
+
             legend.append("text")
-                .attr("x", width - 5)
+                .attr("x", width + 100)
                 .attr("y", 9)
                 .attr("dy", ".32em")
-                .style('font', "9px sans-serif")            
+                .style('font', "9px sans-serif")
                 .style("text-anchor", "end")
                 .text(function (d) { return d; });
         });

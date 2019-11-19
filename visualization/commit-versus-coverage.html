@@ -30,8 +30,8 @@
 
         // Could refactor this to make it more programmatic
         // 1. Set Margins: Recommended by one of the creators of D3 - https://bl.ocks.org/mbostock/3019563
-        var margin = { top: 20, right: 20, bottom: 30, left: 40 };
-        var width = 960 - margin.left - margin.right;
+        var margin = { top: 20, right: 130, bottom: 30, left: 40 };
+        var width = 1130 - margin.left - margin.right;
         var height = 500 - margin.top - margin.bottom;
 
         // 2. Create SVG - Scalable Vector Graphics
@@ -91,7 +91,7 @@
 
             svg.append("g")
                 .append("text")
-                .attr("x", width/2)
+                .attr("x", width / 2)
                 .attr("y", height + 30)
                 .attr("transform", "rotate(0)")
                 .style("font-weight", "bold")
@@ -110,7 +110,7 @@
                 .attr("transform", "rotate(-90)")
                 .style("font-weight", "bold")
                 .style("text-anchor", "end")
-                .text("Coverage %");
+                .text("Test Coverage %");
 
             // 12. Renders Data in our dataset, with DOM elements being mapped.
             // https://riptutorial.com/d3-js/example/16948/the-role-of-placeholders-in--enter--selections
@@ -186,7 +186,7 @@
                 .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
 
             legend.append("rect")
-                .attr("x", width - 18)
+                .attr("x", width + 95)
                 .attr("width", 18)
                 .attr("height", 18)
                 .style("fill", color)
@@ -279,7 +279,7 @@
 
             // 16. Legend placement. As seen in every tutorial and example.
             legend.append("text")
-                .attr("x", width - 24)
+                .attr("x", width + 90)
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .style("text-anchor", "end")
