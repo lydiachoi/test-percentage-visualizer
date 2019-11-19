@@ -9,6 +9,12 @@
 # E.g.: ./git-iterate ./testrepo 
 #       Would run the script on a repo named testrepo
 
+
+if [[ $# -ne 1 ]]; then
+    echo "usage: ./git-iterate <repo-path>"
+    exit 2
+ fi
+
 TEMP_DIR=temp-work-dir
 
 RAW_OUTPUT="./data/raw/output.txt"
