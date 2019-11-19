@@ -75,7 +75,7 @@
                 .style('font', "9px sans-serif")
                 .text("Commit");
             
-            // 10. Declare div
+            // 10. Declare div object for tooltip
             var div = d3.select('body').append('div')
                 .style('position', "absolute")
                 .style('text-align', "center")
@@ -89,7 +89,7 @@
                 .style('display', 'none')
                 .style('pointer-events', 'none');
 
-            // Render Test Passed Par
+            // 11. Render Test Passed bar
             svg.selectAll(".bar1")
                 .data(data)
                 .enter().append("rect")
@@ -113,7 +113,7 @@
                     div.style('display', 'none');
                 });
 
-            // Render Tests Bar
+            // 12. Render Tests bar
             svg.selectAll(".bar2")
                 .data(data)
                 .enter().append("rect")
