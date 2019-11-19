@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <style>
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        body {
+            font: 10px helvetica;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        
+        // Could refactor this to make it more programmatic
+        // 1. Set Margins: Recommended by one of the creators of D3 - https://bl.ocks.org/mbostock/3019563
+        var margin = { top: 20, right: 20, bottom: 30, left: 40 };
+        var width = 960 - margin.left - margin.right;
+        var height = 500 - margin.top - margin.bottom;
+
+        // 2. Create SVG - Scalable Vector Graphics
+        // NOTE: Can add more svgs for multiple graphs displayed
+        var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // Sets the actual scaling of the bars with regards to x-axis
+        var xBar = d3.scale.ordinal().rangeRoundBands([0, width], .2);
+        // Sets the scaling of the full x-axis chart
+        var xChart = d3.scale.ordinal();
+        // Sets the scaling of the full y-axis chart
+        var y = d3.scale.linear().range([height, 0]);
+
+        // Sets both the axis orientation (where to render them)
+        var xAxis = d3.svg.axis().scale(xBar).orient("bottom");
+        var yAxis = d3.svg.axis().scale(y).orient("left");
+
+        // 4. Set colours of the bars
+        var colours = ["#506877", "#f08080", "#5b5048", "#f7ba9b"];
+        var color = d3.scale.ordinal().range(colours);
+
+
+        // 5. Load Data: https://d3-wiki.readthedocs.io/zh_CN/master/CSV/
+        d3.csv("viz-test-data/coverageGrouped.csv", function (error, data) {
+
+            // 6. Gets all headers except Commit (can be set manually if needed to). Can to used for column selection.
+            var headers = ["Statement Coverage %", "Branch Coverage %", "Function Coverage %", "Line Coverage %"];
+
+            // 7. Map parsed csv values (since they are initially strings) into actual integer values.
+            data.forEach(function (d) {
+                d.coverage = headers.map(function (type) {
+                    return {
+                        type: type,
+                        value: +d[type]
+                    };
+                });
+            });
+
+            // 8. Common pattern used in many examples for v3 and v4. Set the domain ranges here. 
+            // https://jaketrent.com/post/use-d3-rangebands/
+            xBar.domain(data.map(function (d) { return d.Commit; }));
+            xChart.domain(headers).rangeRoundBands([0, xBar.rangeBand()]);
+            y.domain([0, d3.max(data, function (d) { return d3.max(d.coverage, function (d) { return d.value; }); })]);
+
+            // 9. Renders the x-axis
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            // 10. Renders the y-axis
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis);
+
+            // 11. Formats the title for the label on the y-axis
+            svg.append("g")
+                .append("text")
+                .attr("y", 15)
+                .attr("transform", "rotate(-90)")
+                .style("text-anchor", "end")
+                .text("Coverage %");
+
+            // 12. Renders Data in our dataset, with DOM elements being mapped.
+            // https://riptutorial.com/d3-js/example/16948/the-role-of-placeholders-in--enter--selections
+            var bars = svg.selectAll(".bars")
+                .data(data)
+                .enter().append("g")
+                .attr("class", "g")
+                .attr("transform", function (d) { return "translate(" + xBar(d.Commit) + ",0)"; });
+
+            // Optional - Graph animations: https://medium.com/swlh/d3-animated-bar-chart-ede2a10709b 
+            // Optional - Tooltips: https://www.d3-graph-gallery.com/graph/interactivity_tooltip.html
+            // Optional - More tooltips: https://chartio.com/resources/tutorials/how-to-show-data-on-mouseover-in-d3js/   
+            var div = d3.select('body').append('div')
+                .style('position', "absolute")
+                .style('text-align', "center")
+                .style('font', "helvetica")
+                .style('border-radius', "5px")
+                .style('padding', "5px")
+                .style('background', "#000000")
+                .style('color', "#ffffff")
+                .style('text-align', "center")
+                .style('margin-top', "10px")
+                .style('display', 'none')
+                .style('pointer-events', 'none');
+
+            bars.selectAll("rect")
+                .data(function (d) { return d.coverage; })
+                .enter().append("rect")
+                .attr("width", xChart.rangeBand())
+                .attr("x", function (d) { return xChart(d.type); })
+                .attr("y", function (d) { return y(0); })
+                .attr("height", function (d) { return height - y(0); })
+                .style("fill", function (d) { return color(d.type); })
+                .attr("class", function (d) {
+                    d.type.replace(/\s/g, ''); //remove spaces
+                })
+                .on('mouseover', function mouseover() {
+                    div.style('display', 'inline');
+                })
+                .on('mousemove', function mousemove() {
+                    var d = d3.select(this).data()[0]
+                    div
+                        .html(d.type + '</br>' + d.value)
+                        .style('left', (d3.event.pageX) + 'px')
+                        .style('top', (d3.event.pageY) + 'px');
+                })
+                .on('mouseout', function mouseout() {
+                    div.style('display', 'none');
+                });
+
+            // This controls the animation delay using .transition() along the y-axis
+            bars.selectAll("rect")
+                .transition()
+                .delay(500)
+                .duration(1000)
+                .attr("y", function (d) { return y(d.value); })
+                .attr("height", function (d) { return height - y(d.value); });
+
+            // 14. Render legend: 
+            // https://www.howtobuildsoftware.com/index.php/how-do/b8Hi/javascript-d3js-how-to-add-legend-to-an-aster-plot-d3-js
+            // https://www.freecodecamp.org/news/how-to-work-with-d3-jss-general-update-pattern-8adce8d55418/
+            // TUTORIAL on selective bar rendering: https://www.frameworkish.com/html/2016/05/04/grouped-dynamic-bar-chart-d3.html
+            var isBoxSelected = false;
+            var typeArray = [];
+            var legend = svg.selectAll(".legend")
+                .data(headers.slice())
+                .enter().append("g")
+                .attr("class", function (d) {
+                    typeArray.push(d.replace(/\s/g, ''));
+                })
+                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
+
+            legend.append("rect")
+                .attr("x", width - 18)
+                .attr("width", 18)
+                .attr("height", 18)
+                .style("fill", color)
+                .attr("id", function (d, i) {
+                    return "id" + d.replace(/\s/g, '');
+                })
+                .on("mouseover", function () {
+                    if (!isBoxSelected) {
+                        d3.select(this).style("cursor", "pointer");
+                    }
+                    else if (isBoxSelected) {
+                        d3.select(this).style("cursor", "pointer");
+                    } else {
+                        d3.select(this).style("cursor", "auto");
+                    }
+                })
+                .on("click", function (d) {
+
+                    // 15. This renders the selected type, and removes the unselected bar types
+                    if (!isBoxSelected) {
+                        d3.select(this)
+                            .style("stroke", "black")
+                            .style("stroke-width", 2);
+                        isBoxSelected = true;
+                        selectedClass = this.id.split("id").pop();
+                        selectedClassIndex = typeArray.indexOf(selectedClass);
+
+                        bars.selectAll("rect")
+                            .transition()
+                            .duration(1000)
+                            .attr("width", xChart.rangeBand())
+                            .style("opacity", 0);
+
+                        bars.selectAll("rect").forEach(function (d, i) {
+                            d3.select(d[selectedClassIndex])
+                                .transition()
+                                .duration(1000)
+                                .delay(750)
+                                .style("opacity", 1);
+                        })
+                    } else {
+                        // 16. This renders all bars again after the legend is unselected.
+                        d3.select(this)
+                            .style("stroke", "none");
+
+                        bars.selectAll("rect")
+                            .transition()
+                            .duration(1000)
+                            .delay(1000)
+                            .attr("width", xChart.rangeBand())
+                            .style("opacity", 1);
+
+                        bars.selectAll("rect")
+                            .data(function (d) { return d.coverage; })
+                            .enter().append("rect")
+                            .attr("width", xChart.rangeBand())
+                            .attr("x", function (d) { return xChart(d.type); })
+                            .attr("y", function (d) { return y(0); })
+                            .attr("height", function (d) { return height - y(0); })
+                            .style("fill", function (d) { return color(d.type); })
+                            .attr("class", function (d) {
+                                d.type.replace(/\s/g, '');
+                            })
+                            .on('mouseover', function mouseover() {
+                                div.style('display', 'inline');
+                            })
+                            .on('mousemove', function mousemove() {
+                                var d = d3.select(this).data()[0]
+                                div
+                                    .html(d.type + '</br>' + d.value)
+                                    .style('left', (d3.event.pageX) + 'px')
+                                    .style('top', (d3.event.pageY) + 'px');
+                            })
+                            .on('mouseout', function mouseout() {
+                                div.style('display', 'none');
+                            });
+                        isBoxSelected = false;
+                    }
+                }
+                );
+            
+            // 16. Legend placement. As seen in every tutorial and example.
+            legend.append("text")
+                .attr("x", width - 24)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .style("text-anchor", "end")
+                .text(function (d) { return d; });
+        });
+
+
+    </script>
+
+</body>
+
+</html>
