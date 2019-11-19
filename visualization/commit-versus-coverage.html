@@ -63,7 +63,9 @@
             if (error) throw error;
 
             // 6. Gets all headers except Commit (can be set manually if needed to). Can to used for column selection.
-            var headers = ["Statement Coverage %", "Branch Coverage %", "Function Coverage %", "Line Coverage %"];
+            var headers = d3.keys(data[0]).filter(function (key) {
+                return key !== "Commit";
+            });
 
             // 7. Map parsed csv values (since they are initially strings) into actual integer values.
             data.forEach(function (d) {
