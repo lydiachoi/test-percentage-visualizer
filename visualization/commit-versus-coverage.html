@@ -5,10 +5,17 @@
     <meta charset="utf-8">
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <style>
-        .axis path,
-        .axis line {
+        .y.axis path,
+        .y.axis line {
             fill: none;
             stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .x.axis path,
+        .x.axis line {
+            fill: none;
+            stroke: #fff;
             shape-rendering: crispEdges;
         }
 
@@ -20,7 +27,7 @@
 
 <body>
     <script>
-        
+
         // Could refactor this to make it more programmatic
         // 1. Set Margins: Recommended by one of the creators of D3 - https://bl.ocks.org/mbostock/3019563
         var margin = { top: 20, right: 20, bottom: 30, left: 40 };
@@ -52,7 +59,8 @@
 
 
         // 5. Load Data: https://d3-wiki.readthedocs.io/zh_CN/master/CSV/
-        d3.csv("viz-test-data/coverageGrouped.csv", function (error, data) {
+        d3.csv("../visualization-data-output/coverageGrouped.csv", function (error, data) {
+            if (error) throw error;
 
             // 6. Gets all headers except Commit (can be set manually if needed to). Can to used for column selection.
             var headers = ["Statement Coverage %", "Branch Coverage %", "Function Coverage %", "Line Coverage %"];
@@ -79,6 +87,15 @@
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis);
 
+            svg.append("g")
+                .append("text")
+                .attr("x", width/2)
+                .attr("y", height + 30)
+                .attr("transform", "rotate(0)")
+                .style("font-weight", "bold")
+                .style("text-anchor", "end")
+                .text("Commit");
+
             // 10. Renders the y-axis
             svg.append("g")
                 .attr("class", "y axis")
@@ -89,6 +106,7 @@
                 .append("text")
                 .attr("y", 15)
                 .attr("transform", "rotate(-90)")
+                .style("font-weight", "bold")
                 .style("text-anchor", "end")
                 .text("Coverage %");
 
@@ -155,6 +173,8 @@
             // TUTORIAL on selective bar rendering: https://www.frameworkish.com/html/2016/05/04/grouped-dynamic-bar-chart-d3.html
             var isBoxSelected = false;
             var typeArray = [];
+            var selectedCounter = 0;
+            var currentSelection = "";
             var legend = svg.selectAll(".legend")
                 .data(headers.slice())
                 .enter().append("g")
@@ -182,13 +202,15 @@
                     }
                 })
                 .on("click", function (d) {
-
+                    if (currentSelection === "") {
+                        currentSelection = d;
+                    }
                     // 15. This renders the selected type, and removes the unselected bar types
-                    if (!isBoxSelected) {
+                    if (!isBoxSelected && selectedCounter == 0) {
                         d3.select(this)
                             .style("stroke", "black")
                             .style("stroke-width", 2);
-                        isBoxSelected = true;
+
                         selectedClass = this.id.split("id").pop();
                         selectedClassIndex = typeArray.indexOf(selectedClass);
 
@@ -205,7 +227,9 @@
                                 .delay(750)
                                 .style("opacity", 1);
                         })
-                    } else {
+                        selectedCounter++;
+                        isBoxSelected = true;
+                    } else if (isBoxSelected && selectedCounter > 0 && currentSelection === d) {
                         // 16. This renders all bars again after the legend is unselected.
                         d3.select(this)
                             .style("stroke", "none");
@@ -241,11 +265,16 @@
                             .on('mouseout', function mouseout() {
                                 div.style('display', 'none');
                             });
+                        currentSelection = "";
+                        selectedCounter--;
                         isBoxSelected = false;
+                    } else if (!isBoxSelected && selectedCounter > 0) {
+                        d3.select(this).style("cursor", "pointer");
+                    } else {
+                        d3.select(this).style("cursor", "pointer");
                     }
-                }
-                );
-            
+                });
+
             // 16. Legend placement. As seen in every tutorial and example.
             legend.append("text")
                 .attr("x", width - 24)
