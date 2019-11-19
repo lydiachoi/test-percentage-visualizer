@@ -29,9 +29,6 @@ COMMITS=$(git -C $TEMP_DIR rev-list --no-merges --reverse HEAD) # add --max-coun
 :> $2 # clears the file before writing to it
 :> changedTestFiles.txt
 
-# runs yarn install 
-bash ./test-setup $TEMP_DIR 
-
 for COMMIT in $COMMITS
 do
     # checkout the commit
@@ -45,7 +42,10 @@ do
     if [[ $TEST_COUNT -ne 0 ]]; then
         # run any scripts that need to be run on tests in here
         # NOTE: these scripts might need arg $TEMP_DIR as well, since that's the work dir with the files
-        
+
+        # runs yarn install on every commit, but doesn't output to files        
+        bash ./test-setup $TEMP_DIR 
+
         # output test coverage and memory usage information of commit to file
         bash ./get-coverage-and-memory $TEMP_DIR 2>&1 | tee -a $2
         bash ./get-changed-test-files $TEMP_DIR 2>&1 | tee -a changedTestFiles.txt
