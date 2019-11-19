@@ -3,11 +3,6 @@
 <head>
     <meta charset="utf-8">
     <script src="https://d3js.org/d3.v4.min.js"></script>
-
-
-    <style>
-
-    </style>
 </head>
 
 <body>
@@ -31,6 +26,8 @@
         var x = d3.scaleLinear().rangeRound([0, width]);
         // Sets the scaling of the full y-axis chart
         var y = d3.scaleBand().rangeRound([0, height]).padding(0.1);
+        var colours = ["#b0c4de","#d8d8d8"];
+        var color = d3.scaleOrdinal().range(colours);
 
         // 3. Load Data: https://d3-wiki.readthedocs.io/zh_CN/master/CSV/
         d3.csv("viz-test-data/testpassed.csv", function (error, data) {
@@ -64,7 +61,7 @@
             svg.append("g")
                 .attr("class", "axis y_axis")
                 .call(d3.axisLeft(y));
-            
+
             // 9. Formats the title for the label on the y-axis
             svg.append("g")
                 .append("text")
@@ -73,8 +70,9 @@
                 .attr("transform", "rotate(0)")
                 .style("text-anchor", "end")
                 .style('font', "9px sans-serif")
+                .style("font-weight", "bold")
                 .text("Commit");
-            
+
             // 10. Declare div object for tooltip
             var div = d3.select('body').append('div')
                 .style('position', "absolute")
@@ -105,7 +103,7 @@
                 .on('mousemove', function mousemove() {
                     var d = d3.select(this).data()[0]
                     div
-                        .html('Total Tests: '  + d["Tests"] + '</br>' + 'Tests Passed: '+ d["Tests Passed"])
+                        .html('Total Tests: ' + d["Tests"] + '</br>' + 'Tests Passed: ' + d["Tests Passed"])
                         .style('left', (d3.event.pageX) + 'px')
                         .style('top', (d3.event.pageY) + 'px');
                 })
@@ -129,13 +127,35 @@
                 .on('mousemove', function mousemove() {
                     var d = d3.select(this).data()[0]
                     div
-                        .html('Total Tests: '  + d["Tests"] + '</br>' + 'Tests Passed: '+ d["Tests Passed"])
+                        .html('Total Tests: ' + d["Tests"] + '</br>' + 'Tests Passed: ' + d["Tests Passed"])
                         .style('left', (d3.event.pageX) + 'px')
                         .style('top', (d3.event.pageY) + 'px');
                 })
                 .on('mouseout', function mouseout() {
                     div.style('display', 'none');
                 });
+
+            // 14. Render legend: 
+            // https://www.howtobuildsoftware.com/index.php/how-do/b8Hi/javascript-d3js-how-to-add-legend-to-an-aster-plot-d3-js
+            var legend = svg.selectAll(".legend")
+                .data(headers.slice())
+                .enter().append("g")
+                .attr("class", "legend")
+                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
+
+            legend.append("rect")
+                .attr("x", width)
+                .attr("width", 18)
+                .attr("height", 18)
+                .style("fill", color);
+                
+            legend.append("text")
+                .attr("x", width - 5)
+                .attr("y", 9)
+                .attr("dy", ".32em")
+                .style('font', "9px sans-serif")            
+                .style("text-anchor", "end")
+                .text(function (d) { return d; });
         });
     </script>
 

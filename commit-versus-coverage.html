@@ -5,10 +5,17 @@
     <meta charset="utf-8">
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <style>
-        .axis path,
-        .axis line {
+        .y.axis path,
+        .y.axis line {
             fill: none;
             stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .x.axis path,
+        .x.axis line {
+            fill: none;
+            stroke: #fff;
             shape-rendering: crispEdges;
         }
 
@@ -80,6 +87,15 @@
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis);
 
+            svg.append("g")
+                .append("text")
+                .attr("x", width/2)
+                .attr("y", height + 30)
+                .attr("transform", "rotate(0)")
+                .style("font-weight", "bold")
+                .style("text-anchor", "end")
+                .text("Commit");
+
             // 10. Renders the y-axis
             svg.append("g")
                 .attr("class", "y axis")
@@ -90,6 +106,7 @@
                 .append("text")
                 .attr("y", 15)
                 .attr("transform", "rotate(-90)")
+                .style("font-weight", "bold")
                 .style("text-anchor", "end")
                 .text("Coverage %");
 
