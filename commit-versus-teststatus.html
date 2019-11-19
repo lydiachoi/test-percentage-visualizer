@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <script>
+        // NOTE, this is now using D3 v4!!
+        // Could refactor this to make it more programmatic
+        // 1. Set Margins: Recommended by one of the creators of D3 - https://bl.ocks.org/mbostock/3019563
+        var margin = { top: 20, right: 20, bottom: 30, left: 40 };
+        var width = 500 - margin.left - margin.right;
+        var height = 960 - margin.top - margin.bottom;
+
+        // 2. Create SVG - Scalable Vector Graphics
+        // NOTE: Can add more svgs for multiple graphs displayed
+        var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // Sets the scaling of the full x-axis chart
+        var x = d3.scaleLinear().rangeRound([0, width]);
+        // Sets the scaling of the full y-axis chart
+        var y = d3.scaleBand().rangeRound([0, height]).padding(0.1);
+
+        // 3. Load Data: https://d3-wiki.readthedocs.io/zh_CN/master/CSV/
+        d3.csv("viz-test-data/testpassed.csv", function (error, data) {
+            if (error) throw error;
+
+            // 4. Gets all headers except Commit (can be set manually if needed to). Can to used for column selection.
+            var headers = ["Tests Passed", "Tests"];
+
+            // 5. Map parsed csv values (since they are initially strings) into actual integer values.
+            data.forEach(function (d) {
+                d.tests = headers.map(function (type) {
+                    return {
+                        type: type,
+                        value: +d[type]
+                    };
+                });
+            })
+
+            // 6. Common pattern used in many examples for v3 and v4. Set the domain ranges here. 
+            // https://jaketrent.com/post/use-d3-rangebands/ 
+            x.domain([0, d3.max(data, function (d) { return d3.max(d.tests, function (d) { return d.value; }); })]);
+            y.domain(data.map(function (d) { return d.Commit; }));
+
+            // 7. Renders the x-axis
+            svg.append("g")
+                .attr("class", "axis x_axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
+
+            // 8. Renders the y-axis
+            svg.append("g")
+                .attr("class", "axis y_axis")
+                .call(d3.axisLeft(y));
+            
+            // 9. Formats the title for the label on the y-axis
+            svg.append("g")
+                .append("text")
+                .attr("x", 15)
+                .attr("y", -10)
+                .attr("transform", "rotate(0)")
+                .style("text-anchor", "end")
+                .style('font', "9px sans-serif")
+                .text("Commit");
+            
+            // 10. Declare div
+            var div = d3.select('body').append('div')
+                .style('position', "absolute")
+                .style('text-align', "center")
+                .style('font', "9px sans-serif")
+                .style('border-radius', "5px")
+                .style('padding', "5px")
+                .style('background', "#000000")
+                .style('color', "#ffffff")
+                .style('text-align', "center")
+                .style('margin-top', "10px")
+                .style('display', 'none')
+                .style('pointer-events', 'none');
+
+            // Render Test Passed Par
+            svg.selectAll(".bar1")
+                .data(data)
+                .enter().append("rect")
+                .style('fill', "#4682b4")
+                .style('opacity', 0.5)
+                .attr("x", 0)
+                .attr("y", function (d) { return y(d.Commit) + 5 })
+                .attr("width", function (d) { return x(d["Tests Passed"]); })
+                .attr("height", y.bandwidth() - 10)
+                .on('mouseover', function mouseover() {
+                    div.style('display', 'inline');
+                })
+                .on('mousemove', function mousemove() {
+                    var d = d3.select(this).data()[0]
+                    div
+                        .html('Total Tests: '  + d["Tests"] + '</br>' + 'Tests Passed: '+ d["Tests Passed"])
+                        .style('left', (d3.event.pageX) + 'px')
+                        .style('top', (d3.event.pageY) + 'px');
+                })
+                .on('mouseout', function mouseout() {
+                    div.style('display', 'none');
+                });
+
+            // Render Tests Bar
+            svg.selectAll(".bar2")
+                .data(data)
+                .enter().append("rect")
+                .style('fill', "#d8d8d8")
+                .style('opacity', 0.5)
+                .attr("x", 0)
+                .attr("y", function (d) { return y(d.Commit); })
+                .attr("width", function (d) { return x(d["Tests"]); })
+                .attr("height", y.bandwidth())
+                .on('mouseover', function mouseover() {
+                    div.style('display', 'inline');
+                })
+                .on('mousemove', function mousemove() {
+                    var d = d3.select(this).data()[0]
+                    div
+                        .html('Total Tests: '  + d["Tests"] + '</br>' + 'Tests Passed: '+ d["Tests Passed"])
+                        .style('left', (d3.event.pageX) + 'px')
+                        .style('top', (d3.event.pageY) + 'px');
+                })
+                .on('mouseout', function mouseout() {
+                    div.style('display', 'none');
+                });
+        });
+    </script>
+
+</body>
+
+</html>
