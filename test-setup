@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Iterate over all the commits in the current branch of a repo
+# This script should be placed and run from outside the repo
+# role: sets up the test run
+# Usage: ./test-setup 
+#
+# repo-path:     relative path to dir of repo
+#
+# E.g.: ./test-setup  ./test-repo
+
+find $1 -name 'package.json' -not -path "*node_modules*" -execdir yarn install \;

@@ -1,0 +1,734 @@
+Commit: 406d5f5159ab709d66a6215aae0dda70d80d7e14
+Author: Kunal Aildasani <kunalaildasani@hotmail.com>
+Date:   Mon Sep 23 00:17:11 2019 -0700
+
+This commit has no tests
+Commit: 781e3113292335cfa22fd5b4635eedda272c2c99
+Author: Kunal AIldasani <kunalaildasani@hotmail.com>
+Date:   Mon Sep 23 00:22:42 2019 -0700
+
+This commit has no tests
+Commit: 2320e99e952323f6c1824f2616091779f19d67bd
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Mon Sep 23 13:10:12 2019 -0700
+
+This commit has no tests
+Commit: b984505b6772e9f24410471f11844f8c7c13d0b8
+Author: Kunal AIldasani <kunalaildasani@hotmail.com>
+Date:   Wed Sep 25 23:43:03 2019 -0700
+
+This commit has no tests
+Commit: d7858e18c396c3f382d7e5308c68a653d7e543c3
+Author: Kunal AIldasani <kunalaildasani@hotmail.com>
+Date:   Thu Sep 26 00:27:56 2019 -0700
+
+This commit has no tests
+Commit: 83ad2aa44fccc568ff6b9b058d260aca49977653
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Thu Sep 26 14:33:42 2019 -0700
+
+This commit has no tests
+Commit: d95951d586b25327e5bc1e2d581a06547677560f
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Mon Oct 7 14:24:34 2019 -0700
+
+This commit has no tests
+Commit: 090937986e39dc9fa2151f8e24742bb60ef9584b
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Mon Oct 7 16:38:57 2019 -0700
+
+This commit has no tests
+Commit: 79e2989125acf1cf4443fa793cc0518b90e7c3d9
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Mon Oct 7 20:42:01 2019 -0700
+
+This commit has no tests
+Commit: 2a5b51d7cdc6a5a995fd1d67d33840af037ebdb9
+Author: Kunal AIldasani <kunalaildasani@hotmail.com>
+Date:   Fri Oct 11 16:20:46 2019 -0700
+
+This commit has no tests
+Commit: c1ecffb48301891b6bde2f8c10f2230e7da87e41
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Fri Oct 11 19:28:56 2019 -0700
+
+This commit has no tests
+Commit: e779e4a8264daf3d4165e35e0ce7c11310c0ca8c
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Sat Oct 12 23:16:52 2019 -0700
+
+This commit has no tests
+Commit: b83ffe2ae77bfc6a7fd49255c31820581d1286fe
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Sat Oct 12 23:46:26 2019 -0700
+
+This commit has no tests
+Commit: 7d935eca6c5e707a7d6a981b1ad4f551e8d4545f
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Sun Oct 13 12:08:27 2019 -0700
+
+This commit has no tests
+Commit: eb60f31d083239f758c34a4ebf8e5794671073ef
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Sun Oct 13 12:32:10 2019 -0700
+
+This commit has no tests
+Commit: 081788aba567676250f5af007a52eb2f0dff9d85
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Sun Oct 13 14:03:24 2019 -0700
+
+This commit has no tests
+Commit: ef5c656fc7e6f3502241fdc5d757d73eb8bafc07
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Sun Oct 13 14:17:28 2019 -0700
+
+This commit has no tests
+Commit: b08634a83bd8e3b8ba02956c64d0c7c99fe2a116
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Sun Oct 13 15:03:04 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --logHeapUsage --changedFilesWithAncestor --watchAll=false
+PASS src/components/Section/components/Breadcrumbs/Breadcrumbs.test.js (5.202s, 57 MB heap size)
+PASS src/foundation/App/components/StoreProvider/StoreProvider.test.js (5.263s, 54 MB heap size)
+PASS src/components/Section/Section.test.js (5.38s, 63 MB heap size)
+PASS src/components/Button/Button.test.js (68 MB heap size)
+PASS src/foundation/App/App.test.js (68 MB heap size)
+
+Test Suites: 5 passed, 5 total
+Tests:       24 passed, 24 total
+Snapshots:   0 total
+Time:        11.087s
+Ran all test suites related to changed files.
+Done in 13.69s.
+Commit: f59d82432f7e365a6b59f72ded093928c3c7185e
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Sun Oct 13 19:08:44 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --logHeapUsage --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/components/StoreProvider/StoreProvider.test.js (63 MB heap size)
+FAIL src/foundation/App/App.test.js
+  ● Test suite failed to run
+
+    Cannot find module './Expenses' from 'index.js'
+
+    However, Jest was able to find:
+    	'./App.js'
+    	'./App.test.js'
+
+    You might want to include a file extension in your import, or update your 'moduleFileExtensions', which is currently ['web.js', 'js', 'web.ts', 'ts', 'web.tsx', 'tsx', 'json', 'web.jsx', 'jsx', 'node'].
+
+    See https://jestjs.io/docs/en/configuration#modulefileextensions-array-string
+
+      1 | export { default as Admin } from "./Admin";
+    > 2 | export { default as Expenses } from "./Expenses";
+        | ^
+      3 | export { default as Home } from "./Home";
+      4 | export { default as Users } from "./Users";
+      5 | 
+
+      at Resolver.resolveModule (node_modules/jest-resolve/build/index.js:259:17)
+      at Object.<anonymous> (src/sections/index.js:2:1)
+
+FAIL src/components/Section/Section.test.js (55 MB heap size)
+  ● <Section /> › renders admin <Link />
+
+    Method “props” is meant to be run on 1 node. 2 found instead.
+
+      21 |     const adminLink = section.find(Link);
+      22 | 
+    > 23 |     expect(adminLink.prop("children")).toStrictEqual("Admin Console");
+         |                      ^
+      24 |     expect(adminLink.prop("to")).toStrictEqual("/admin");
+      25 |   });
+      26 | 
+
+      at ShallowWrapper.single (node_modules/enzyme/src/ShallowWrapper.js:1636:13)
+      at ShallowWrapper.single [as props] (node_modules/enzyme/src/ShallowWrapper.js:1160:17)
+      at ShallowWrapper.props [as prop] (node_modules/enzyme/src/ShallowWrapper.js:1295:17)
+      at Object.prop (src/components/Section/Section.test.js:23:22)
+
+Test Suites: 2 failed, 1 passed, 3 total
+Tests:       1 failed, 10 passed, 11 total
+Snapshots:   0 total
+Time:        6.886s
+Ran all test suites related to changed files.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+Commit: 1c24a018d2a268ec182850827a0294bd34f151c7
+Author: andrewhllam <33971245+andrewhllam@users.noreply.github.com>
+Date:   Sun Oct 13 19:14:25 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --logHeapUsage --changedFilesWithAncestor --watchAll=false
+No tests found related to files changed since last commit.
+Done in 2.31s.
+Commit: 4f81a539f35b5d4a8609f588e51a7ea82ec08ebb
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Sun Oct 13 19:23:24 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+FAIL src/foundation/App/App.test.js (5.16s)
+  <App />
+    ✓ renders itself (6ms)
+    ✓ renders <StoreProvider /> (28ms)
+    ✓ renders <Router /> (10ms)
+    ✕ renders four <Route /> components (17ms)
+
+  ● <App /> › renders four <Route /> components
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 4
+    Received length: 3
+    Received object: {}
+
+      26 |     const app = shallow(<App />);
+      27 | 
+    > 28 |     expect(app.find(Route)).toHaveLength(4);
+         |                             ^
+      29 |   });
+      30 | });
+      31 | 
+
+      at Object.toHaveLength (src/foundation/App/App.test.js:28:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 3 passed, 4 total
+Snapshots:   0 total
+Time:        8.434s, estimated 10s
+Ran all test suites related to changed files.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+Commit: 19601d47060d49296aa87774c8ec6453b315a7ad
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Sun Oct 13 19:52:32 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+FAIL src/foundation/App/App.test.js (5.494s)
+  <App />
+    ✓ renders itself (13ms)
+    ✓ renders <StoreProvider /> (35ms)
+    ✓ renders <Router /> (9ms)
+    ✕ renders four <Route /> components (17ms)
+
+  ● <App /> › renders four <Route /> components
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 4
+    Received length: 3
+    Received object: {}
+
+      26 |     const app = shallow(<App />);
+      27 | 
+    > 28 |     expect(app.find(Route)).toHaveLength(4);
+         |                             ^
+      29 |   });
+      30 | });
+      31 | 
+
+      at Object.toHaveLength (src/foundation/App/App.test.js:28:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 3 passed, 4 total
+Snapshots:   0 total
+Time:        9.346s, estimated 13s
+Ran all test suites related to changed files.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+./get-changed-test-files: line 11: thAncestor: command not found
+Commit: 64da2100b416d7184ac7b4d685c91d5d202d3d60
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Sun Oct 13 19:58:46 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+FAIL src/foundation/App/App.test.js
+  <App />
+    ✓ renders itself (12ms)
+    ✓ renders <StoreProvider /> (28ms)
+    ✓ renders <Router /> (7ms)
+    ✕ renders four <Route /> components (14ms)
+
+  ● <App /> › renders four <Route /> components
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 4
+    Received length: 3
+    Received object: {}
+
+      26 |     const app = shallow(<App />);
+      27 | 
+    > 28 |     expect(app.find(Route)).toHaveLength(4);
+         |                             ^
+      29 |   });
+      30 | });
+      31 | 
+
+      at Object.toHaveLength (src/foundation/App/App.test.js:28:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 3 passed, 4 total
+Snapshots:   0 total
+Time:        8.02s, estimated 15s
+Ran all test suites related to changed files.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+Commit: 1c343a6712a9cf5352d078568241c75c7e24d4b1
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Sun Oct 13 20:35:39 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/components/StoreProvider/StoreProvider.test.js (5.155s)
+FAIL src/foundation/App/App.test.js (5.601s)
+  ● <App /> › renders four <Route /> components
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 4
+    Received length: 3
+    Received object: {}
+
+      26 |     const app = shallow(<App />);
+      27 | 
+    > 28 |     expect(app.find(Route)).toHaveLength(4);
+         |                             ^
+      29 |   });
+      30 | });
+      31 | 
+
+      at Object.toHaveLength (src/foundation/App/App.test.js:28:29)
+
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       1 failed, 6 passed, 7 total
+Snapshots:   0 total
+Time:        9.921s, estimated 13s
+Ran all test suites related to changed files.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+Commit: c0d2cc0fbd7e2597991b53ab2ef5d2d4db2525ee
+Author: Kshitij Jain <jainkshitij16@outlook.com>
+Date:   Mon Oct 14 19:45:09 2019 -0700
+
+This commit has no tests
+Commit: adaafc6b3bb45af04261a8b7bdaf0a4ad5b73e26
+Author: kunal06 <kunalaildasani@hotmail.com>
+Date:   Tue Oct 15 11:21:25 2019 -0700
+
+This commit has no tests
+Commit: 6c9c60b4b47933deb7a185a092795ade29f00d25
+Author: kunal06 <kunalaildasani@hotmail.com>
+Date:   Tue Oct 15 11:54:54 2019 -0700
+
+This commit has no tests
+Commit: 6159f9545642d3301dc193886ae6e07d5a569c61
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Tue Oct 15 13:21:24 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+FAIL src/foundation/App/App.test.js
+  <App />
+    ✓ renders itself (7ms)
+    ✓ renders <StoreProvider /> (23ms)
+    ✓ renders <Router /> (6ms)
+    ✕ renders four <Route /> components (10ms)
+
+  ● <App /> › renders four <Route /> components
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 4
+    Received length: 3
+    Received object: {}
+
+      26 |     const app = shallow(<App />);
+      27 | 
+    > 28 |     expect(app.find(Route)).toHaveLength(4);
+         |                             ^
+      29 |   });
+      30 | });
+      31 | 
+
+      at Object.toHaveLength (src/foundation/App/App.test.js:28:29)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 3 passed, 4 total
+Snapshots:   0 total
+Time:        8.516s, estimated 13s
+Ran all test suites related to changed files.
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+Commit: 350c53619685c144eb4fccaa1eaa76386fa5d6d5
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Tue Oct 15 13:35:12 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/App.test.js
+  <App />
+    ✓ renders itself (9ms)
+    ✓ renders <StoreProvider /> (29ms)
+    ✓ renders <Router /> (7ms)
+    ✓ renders four <Route /> components (16ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        8.356s, estimated 13s
+Ran all test suites related to changed files.
+Done in 11.04s.
+Commit: 1c0be09494bf42341f5aa78f1ebb0e9dd140b1f5
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Tue Oct 15 13:39:12 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/components/Page/components/Breadcrumbs/Breadcrumbs.test.js
+PASS src/components/Page/Page.test.js
+PASS src/foundation/App/App.test.js
+
+Test Suites: 3 passed, 3 total
+Tests:       16 passed, 16 total
+Snapshots:   0 total
+Time:        7.519s, estimated 13s
+Ran all test suites related to changed files.
+Done in 10.06s.
+Commit: 5174f0119c08ee5caf8cc25fcf4764172dedc28c
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Tue Oct 15 14:26:07 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/components/Page/Page.test.js
+  <Page />
+    ✓ renders itself (7ms)
+    ✓ renders home <Link /> (25ms)
+    ✓ renders admin <Link /> (12ms)
+    ✓ renders <Breadcrumbs /> (10ms)
+    ✓ renders <Breadcrumbs /> with props if passed (6ms)
+    ✓ renders title (6ms)
+    ✓ does not render button (6ms)
+    ✓ renders primary button with action if action passed (9ms)
+    ✓ renders children (3ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       9 passed, 9 total
+Snapshots:   0 total
+Time:        3.043s, estimated 5s
+Ran all test suites related to changed files.
+Done in 5.21s.
+Commit: 533b3ab0d71d061c6731155cd5c7e2d4bffc0334
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Tue Oct 15 14:26:30 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/App.test.js (10.626s)
+  <App />
+    ✓ renders itself (8ms)
+    ✓ renders <StoreProvider /> (26ms)
+    ✓ renders <Router /> (5ms)
+    ✓ renders four <Route /> components (8ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        13.925s
+Ran all test suites related to changed files.
+Done in 16.51s.
+Commit: de784adc5a8fc6c4b7f43fd4951dbb784fe888d0
+Author: kunal06 <kunalaildasani@hotmail.com>
+Date:   Tue Oct 15 15:36:50 2019 -0700
+
+This commit has no tests
+Commit: 92a226a266fa8aaaf3bc25c3e945d6bcbba383dc
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Tue Oct 15 14:55:17 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/components/Section/Section.test.js (12.626s)
+PASS src/components/Page/Page.test.js (13.798s)
+PASS src/foundation/App/App.test.js (14.511s)
+
+Test Suites: 3 passed, 3 total
+Tests:       17 passed, 17 total
+Snapshots:   0 total
+Time:        19.119s
+Ran all test suites related to changed files.
+Done in 22.78s.
+Commit: e067b83fecfab2b949ed2f8ac402180dd87d4148
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Tue Oct 15 16:05:50 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/App.test.js (12.275s)
+  <App />
+    ✓ renders itself (14ms)
+    ✓ renders <StoreProvider /> (26ms)
+    ✓ renders <Router /> (7ms)
+    ✓ renders four <Route /> components (9ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        15.492s
+Ran all test suites related to changed files.
+Done in 18.07s.
+Commit: 51bfe72a05b2cd823eccf770359d0a26e58493e4
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Tue Oct 15 17:19:30 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/components/Section/Section.test.js (11.34s)
+PASS src/components/Page/Page.test.js (11.479s)
+PASS src/foundation/App/App.test.js (11.614s)
+
+Test Suites: 3 passed, 3 total
+Tests:       17 passed, 17 total
+Snapshots:   0 total
+Time:        15.827s
+Ran all test suites related to changed files.
+Done in 18.26s.
+Commit: 364f9f203bd9b689846fb8e03403ac53dc09c839
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Tue Oct 15 17:37:39 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/components/StoreProvider/StoreProvider.test.js (10.308s)
+PASS src/foundation/App/App.test.js (10.556s)
+
+Test Suites: 2 passed, 2 total
+Tests:       7 passed, 7 total
+Snapshots:   0 total
+Time:        14.686s, estimated 17s
+Ran all test suites related to changed files.
+Done in 17.70s.
+Commit: cf843f02c844816e6bf82ba454400d93497ef2c0
+Author: kunal06 <kunalaildasani@hotmail.com>
+Date:   Tue Oct 15 18:08:10 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+No tests found related to files changed since last commit.
+Done in 2.46s.
+Commit: f87bfbd75e78db7911646e3dc5f1d4a936cd9e7d
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Wed Oct 16 14:05:40 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/App.test.js (10.395s)
+  <App />
+    ✓ renders itself (8ms)
+    ✓ renders <StoreProvider /> (22ms)
+    ✓ renders <Router /> (6ms)
+    ✓ renders four <Route /> components (61ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        13.659s
+Ran all test suites related to changed files.
+Done in 16.13s.
+Commit: d06ed3d20d516ffdfcd8c80d1adaff9989ddf575
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Wed Oct 16 14:26:11 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/App.test.js (10.017s)
+  <App />
+    ✓ renders itself (7ms)
+    ✓ renders <StoreProvider /> (45ms)
+    ✓ renders <Router /> (29ms)
+    ✓ renders four <Route /> components (19ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        13.06s
+Ran all test suites related to changed files.
+Done in 15.44s.
+Commit: 6a3fad38f7d0dc37c4bf8e9dd4aa657959af1eb7
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Wed Oct 16 14:50:56 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/App.test.js (9.755s)
+  <App />
+    ✓ renders itself (8ms)
+    ✓ renders <StoreProvider /> (19ms)
+    ✓ renders <Router /> (5ms)
+    ✓ renders four <Route /> components (6ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        13.071s
+Ran all test suites related to changed files.
+Done in 15.46s.
+Commit: 3ac4682e3f00a85460f2aa35cbbeab7e13dc7ade
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Wed Oct 16 15:07:43 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/App.test.js
+  <App />
+    ✓ renders itself (7ms)
+    ✓ renders <StoreProvider /> (19ms)
+    ✓ renders <Router /> (5ms)
+    ✓ renders four <Route /> components (6ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        6.699s, estimated 12s
+Ran all test suites related to changed files.
+Done in 8.90s.
+Commit: b0261f5fbc85cbbe6e710bb5486b4ceb5140dcaa
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Wed Oct 16 15:12:05 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/App.test.js
+  <App />
+    ✓ renders itself (10ms)
+    ✓ renders <StoreProvider /> (21ms)
+    ✓ renders <Router /> (4ms)
+    ✓ renders four <Route /> components (6ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        7.245s, estimated 11s
+Ran all test suites related to changed files.
+Done in 9.41s.
+Commit: 42dcc11432d38556f55ee6754eb7ec93bac16ba5
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Wed Oct 16 15:23:23 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/App.test.js
+  <App />
+    ✓ renders itself (7ms)
+    ✓ renders <StoreProvider /> (22ms)
+    ✓ renders <Router /> (5ms)
+    ✓ renders four <Route /> components (10ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        7.586s, estimated 11s
+Ran all test suites related to changed files.
+Done in 9.75s.
+Commit: 3edbca3ec0e7af1bbea98511c647fa3b49afb0e5
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Thu Oct 17 14:51:00 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/components/ExpenseItem/ExpenseItem.test.js (12.841s)
+PASS src/components/Page/Page.test.js (13.579s)
+PASS src/foundation/App/App.test.js (14.054s)
+PASS src/components/Section/Section.test.js
+
+Test Suites: 4 passed, 4 total
+Tests:       20 passed, 20 total
+Snapshots:   0 total
+Time:        19.814s
+Ran all test suites related to changed files.
+Done in 22.20s.
+Commit: 5e1d1df02f58b5a68ed894ea897df20dae96a1ab
+Author: kunal06 <kunalaildasani@hotmail.com>
+Date:   Thu Oct 17 16:00:19 2019 -0700
+
+This commit has no tests
+Commit: 08182f66e40371b2587272c2dff8fe9bd11f511d
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Thu Oct 17 19:16:04 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/components/Section/Section.test.js (7.578s)
+PASS src/components/Page/Page.test.js (7.87s)
+PASS src/foundation/App/App.test.js (8.368s)
+
+Test Suites: 3 passed, 3 total
+Tests:       17 passed, 17 total
+Snapshots:   0 total
+Time:        13.315s
+Ran all test suites related to changed files.
+Done in 16.69s.
+Commit: 5d44771ccf70d1f5bc4f28c2ccbd4a485976f801
+Author: Kshitij Jain <jainkshitij16@outlook.com>
+Date:   Fri Oct 18 18:15:50 2019 -0700
+
+This commit has no tests
+Commit: 4e52f7a03ca3830987de85936a008a19f3a4ef65
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Sun Oct 20 15:13:53 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/components/StoreProvider/StoreProvider.test.js (10.672s)
+PASS src/foundation/App/App.test.js (10.733s)
+
+Test Suites: 2 passed, 2 total
+Tests:       7 passed, 7 total
+Snapshots:   0 total
+Time:        14.76s, estimated 22s
+Ran all test suites related to changed files.
+Done in 17.57s.
+Commit: 396895975062238f314737d1650de4523b708b28
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Sun Oct 20 15:40:57 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/components/StoreProvider/StoreProvider.test.js (10.016s)
+PASS src/foundation/App/App.test.js (10.173s)
+
+Test Suites: 2 passed, 2 total
+Tests:       7 passed, 7 total
+Snapshots:   0 total
+Time:        14.068s, estimated 15s
+Ran all test suites related to changed files.
+Done in 17.17s.
+Commit: 8fa4d418188a57fd54c6fb88c6c5c38740142d0d
+Author: Chris Bolton <chris.bolton97@gmail.com>
+Date:   Sun Oct 20 15:46:46 2019 -0700
+
+yarn run v1.9.4
+$ react-scripts test --changedFilesWithAncestor --watchAll=false
+PASS src/foundation/App/App.test.js (11.525s)
+  <App />
+    ✓ renders itself (17ms)
+    ✓ renders <StoreProvider /> (50ms)
+    ✓ renders <Router /> (20ms)
+    ✓ renders four <Route /> components (12ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        15.71s, estimated 18s
+Ran all test suites related to changed files.
+Done in 18.77s.
+Commit: e5a485defb0d5c570b8a97c2818d57f589e78040
+Author: Andrew Lam <s5i0b@ugrad.cs.ubc.ca>
+Date:   Sun Oct 20 17:32:00 2019 -0700
+
