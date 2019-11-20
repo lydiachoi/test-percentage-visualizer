@@ -1,20 +1,23 @@
 #!/bin/bash
 
-# Iterate over all the commits in the current branch of a repo
+# Iterate over the commits in the current branch of a repo
 # This script should be placed and run from outside the repo
-# Usage: ./git-iterate <repo-path>
+# Usage: ./git-iterate <repo-path> [<subsample-freq>]
 #
 # repo-path: relative path to dir of repo
+# subsample-freq: optional frequency of commits to subsample,
+#                 defaults to 1 (i.e. sample every commit)
 #
-# E.g.: ./git-iterate ./testrepo 
-#       Would run the script on a repo named testrepo
+# E.g.: ./git-iterate ./testrepo 3
+# would run the script on a repo named testrepo, checking out every 3rd commit
 
 
-if [[ $# -ne 1 ]]; then
-    echo "usage: ./git-iterate <repo-path>"
+if [[ $# -lt 1 ]] || [[ $# -gt 2 ]]; then
+    echo "usage: ./git-iterate <repo-path> [<subsample-freq>]"
     exit 2
  fi
 
+SUBSAMPLE_FREQ=${2:-1}
 TEMP_DIR=temp-work-dir
 
 RAW_OUTPUT="./data/raw/output.txt"
@@ -29,8 +32,9 @@ OUTPUT_TESTS="./data/tests.csv"
 # this stuff is FOR SAFETY!!!
 git --git-dir=$1/.git worktree add $TEMP_DIR
 
-# get a list of all commits, omitting merges
-COMMITS=$(git -C $TEMP_DIR rev-list --no-merges --reverse HEAD) # add --max-count=<num>to limit commits to given number; for testing only. 
+# get an array of all commits, omitting merges
+COMMITS=($(git -C $1 rev-list --no-merges --reverse HEAD)) # add --max-count=<num>to limit commits to given number; for testing only. 
+COMMITS_LEN=${#COMMITS[@]}
 
  # clears the file before writing to it
 > changedTestFiles.txt
@@ -40,8 +44,10 @@ COMMITS=$(git -C $TEMP_DIR rev-list --no-merges --reverse HEAD) # add --max-coun
 > $OUTPUT_COVERAGE
 > $OUTPUT_TESTS
 
-for COMMIT in $COMMITS
-do
+for (( i = 0; i < $COMMITS_LEN; i += $SUBSAMPLE_FREQ )); do
+    # get commit from array
+    COMMIT=${COMMITS[$i]}
+
     # checkout the commit
     git -C $TEMP_DIR checkout -q $COMMIT
 
