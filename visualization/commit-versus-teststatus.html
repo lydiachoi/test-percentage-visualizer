@@ -39,8 +39,20 @@
             });
 
             // 5. Map parsed csv values (since they are initially strings) into actual integer values.
+            // data = data.filter(function (d) {          
+            //     if (typeof d["Tests Passed"] === 'undefined' ||
+            //         typeof d["Tests"] === 'undefined') {
+            //         return false;
+            //     }
+            //     d.value = +d.value;
+            //     return true;
+
+            // });
+
+            console.log(data);
             data.forEach(function (d) {
-                d.tests = headers.map(function (type) {
+                //d.Commit = d.Commit.substring(0,4);
+                d.coverage = headers.map(function (type) {
                     return {
                         type: type,
                         value: +d[type]
