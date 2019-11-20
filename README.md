@@ -5,7 +5,7 @@ Visualizer tool to display testing related information per commits. The tool cur
 # Visualizer Setup & Tool Usage
 
 1. Clone and cd into the repo
-2. Run the command `./git-iterate <repo-path>`
+2. Run the command `./compute-testing-info <repo-path>`
 
 # NOTE: Since the libraries are called by the browser, you will need an active internet connection.
 
