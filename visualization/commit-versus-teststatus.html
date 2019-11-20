@@ -38,21 +38,29 @@
                 return key !== "Commit";
             });
 
-            // 5. Map parsed csv values (since they are initially strings) into actual integer values.
-            // data = data.filter(function (d) {          
-            //     if (typeof d["Tests Passed"] === 'undefined' ||
-            //         typeof d["Tests"] === 'undefined') {
-            //         return false;
-            //     }
-            //     d.value = +d.value;
-            //     return true;
+            //5. Map parsed csv values (since they are initially strings) into actual integer values.
+            data = data.filter(function (d) {    
+                // console.log(d);    
+                // console.log(typeof d["Tests Passed"] === 'undefined');
+                // console.log(typeof d["Tests"] === 'undefined');
+                // console.log(d["Test Passed"] === "");
+                // console.log(d["Tests"] === "");
+                if (typeof d["Test Passed"] === 'undefined' ||
+                    typeof d["Tests"] === 'undefined' || 
+                    d["Test Passed"] === "" ||
+                    d["Tests"] === "") {
+                    return false;
+                }
+                d["Test Passed"] = +d["Test Passed"];
+                d["Tests"] = +d["Tests"];
+                return true;
 
-            // });
+            });
 
             console.log(data);
             data.forEach(function (d) {
-                //d.Commit = d.Commit.substring(0,4);
-                d.coverage = headers.map(function (type) {
+                d.Commit = d.Commit.substring(0,4);
+                d.tests = headers.map(function (type) {
                     return {
                         type: type,
                         value: +d[type]
@@ -119,7 +127,7 @@
                 .style('opacity', 0.5)
                 .attr("x", 0)
                 .attr("y", function (d) { return y(d.Commit) + 5 })
-                .attr("width", function (d) { return x(d["Tests Passed"]); })
+                .attr("width", function (d) { return x(d["Test Passed"]); })
                 .attr("height", y.bandwidth() - 10)
                 .on('mouseover', function mouseover() {
                     div.style('display', 'inline');
@@ -127,7 +135,7 @@
                 .on('mousemove', function mousemove() {
                     var d = d3.select(this).data()[0]
                     div
-                        .html('Total Tests: ' + d["Tests"] + '</br>' + 'Tests Passed: ' + d["Tests Passed"])
+                        .html('Total Tests: ' + d["Tests"] + '</br>' + 'Tests Passed: ' + d["Test Passed"])
                         .style('left', (d3.event.pageX) + 'px')
                         .style('top', (d3.event.pageY) + 'px');
                 })
@@ -151,7 +159,7 @@
                 .on('mousemove', function mousemove() {
                     var d = d3.select(this).data()[0]
                     div
-                        .html('Total Tests: ' + d["Tests"] + '</br>' + 'Tests Passed: ' + d["Tests Passed"])
+                        .html('Total Tests: ' + d["Tests"] + '</br>' + 'Tests Passed: ' + d["Test Passed"])
                         .style('left', (d3.event.pageX) + 'px')
                         .style('top', (d3.event.pageY) + 'px');
                 })
