@@ -2,21 +2,27 @@
 
 # Iterate over all the commits in the current branch of a repo
 # This script should be placed and run from outside the repo
-# Usage: ./git-iterate <repo-path> <output-file>
+# Usage: ./git-iterate <repo-path>
 #
-# repo-path:     relative path to dir of repo
-# output-file:   output file to redirect results to
+# repo-path: relative path to dir of repo
 #
-# E.g.: ./git-iterate ./testrepo ./output.txt
-#       Would run the script on a repo named testrepo and
-#       output the results to a file called output.txt
+# E.g.: ./git-iterate ./testrepo 
+#       Would run the script on a repo named testrepo
 
-if [[ $# -ne 2 ]]; then
-    echo "usage: ./git-iterate <repo-path> <output-file>"
+
+if [[ $# -ne 1 ]]; then
+    echo "usage: ./git-iterate <repo-path>"
     exit 2
-fi
+ fi
 
 TEMP_DIR=temp-work-dir
+
+RAW_OUTPUT="./data/raw/output.txt"
+RAW_COVERAGE="./data/raw/coverage.csv"
+RAW_TESTS="./data/raw/tests.csv"
+
+OUTPUT_COVERAGE="./data/coverage.csv"
+OUTPUT_TESTS="./data/tests.csv"
 
 # create a new work dir/tree based on the repo's HEAD, in the same dir as the script
 # this also creates and checks out a new branch with the same name as the work dir/tree
@@ -26,8 +32,13 @@ git --git-dir=$1/.git worktree add $TEMP_DIR
 # get a list of all commits, omitting merges
 COMMITS=$(git -C $TEMP_DIR rev-list --no-merges --reverse HEAD) # add --max-count=<num>to limit commits to given number; for testing only. 
 
-:> $2 # clears the file before writing to it
-:> changedTestFiles.txt
+ # clears the file before writing to it
+> changedTestFiles.txt
+> $RAW_OUTPUT
+> $RAW_COVERAGE
+> $RAW_TESTS
+> $OUTPUT_COVERAGE
+> $OUTPUT_TESTS
 
 for COMMIT in $COMMITS
 do
@@ -35,7 +46,7 @@ do
     git -C $TEMP_DIR checkout -q $COMMIT
 
     # collect the commit metadata
-    git -C $TEMP_DIR log -n 1 --pretty=format:"Commit: %H%nAuthor: %an <%ae>%nDate:   %ad%n%n" | tee -a $2  | tee -a changedTestFiles.txt
+    git -C $TEMP_DIR log -n 1 --pretty=format:"Commit: %H%nAuthor: %an <%ae>%nDate:   %ad%n%n" | tee -a $RAW_OUTPUT | tee -a changedTestFiles.txt
 
     # check that there are any test files to run
     TEST_COUNT=$(find $TEMP_DIR -not -path '*/node_modules/*' -type f \( -name '*.test.js' -o -name '*.spec.ts' \) | wc -l)
@@ -47,16 +58,24 @@ do
         bash ./test-setup $TEMP_DIR 
 
         # output test coverage and memory usage information of commit to file
-        bash ./get-coverage-and-memory $TEMP_DIR 2>&1 | tee -a $2
+        bash ./get-coverage-and-memory $TEMP_DIR 2>&1 | tee -a $RAW_OUTPUT
         bash ./get-changed-test-files $TEMP_DIR 2>&1 | tee -a changedTestFiles.txt
 
         # clean up the files back to the original commit state before switching
         git -C $TEMP_DIR checkout -q .
     else
         # output that this commit had no tests to file
-        echo "This commit has no tests" | tee -a $2 | tee -a changedTestFiles.txt
+        echo "This commit has no tests" | tee -a $RAW_OUTPUT | tee -a changedTestFiles.txt
     fi
 done
+
+# parse through RAW_OUTPUT to grab relevant data
+awk -f ./parsers/coverage.awk $RAW_OUTPUT > $RAW_COVERAGE
+awk -f ./parsers/tests.awk $RAW_OUTPUT > $RAW_TESTS
+
+# apply formatting and save to output file
+awk -f ./parsers/format.awk $RAW_COVERAGE > $OUTPUT_COVERAGE
+awk -f ./parsers/format.awk $RAW_TESTS > $OUTPUT_TESTS
 
 # clean up the temporary work dir/tree and branch
 git -C $1 worktree remove $TEMP_DIR
