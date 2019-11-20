@@ -10,7 +10,7 @@
         // NOTE, this is now using D3 v4!!
         // Could refactor this to make it more programmatic
         // 1. Set Margins: Recommended by one of the creators of D3 - https://bl.ocks.org/mbostock/3019563
-        var margin = { top: 20, right: 130, bottom: 30, left: 40 };
+        var margin = { top: 20, right: 130, bottom: 130, left: 70 };
         var width = 960 - margin.left - margin.right;
         var height = 1200 - margin.top - margin.bottom;
 
@@ -40,26 +40,17 @@
 
             //5. Map parsed csv values (since they are initially strings) into actual integer values.
             data = data.filter(function (d) {    
-                // console.log(d);    
-                // console.log(typeof d["Tests Passed"] === 'undefined');
-                // console.log(typeof d["Tests"] === 'undefined');
-                // console.log(d["Test Passed"] === "");
-                // console.log(d["Tests"] === "");
                 if (typeof d["Test Passed"] === 'undefined' ||
                     typeof d["Tests"] === 'undefined' || 
                     d["Test Passed"] === "" ||
                     d["Tests"] === "") {
                     return false;
                 }
-                d["Test Passed"] = +d["Test Passed"];
-                d["Tests"] = +d["Tests"];
                 return true;
-
             });
 
-            console.log(data);
             data.forEach(function (d) {
-                d.Commit = d.Commit.substring(0,4);
+                d.Commit = d.Commit.substring(0,7);
                 d.tests = headers.map(function (type) {
                     return {
                         type: type,
