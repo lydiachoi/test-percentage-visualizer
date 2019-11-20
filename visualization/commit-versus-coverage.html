@@ -30,7 +30,7 @@
 
         // Could refactor this to make it more programmatic
         // 1. Set Margins: Recommended by one of the creators of D3 - https://bl.ocks.org/mbostock/3019563
-        var margin = { top: 20, right: 130, bottom: 30, left: 40 };
+        var margin = { top: 20, right: 130, bottom: 31, left: 40 };
         var width = 1130 - margin.left - margin.right;
         var height = 500 - margin.top - margin.bottom;
 
@@ -57,7 +57,6 @@
         var colours = ["#506877", "#f08080", "#5b5048", "#f7ba9b"];
         var color = d3.scale.ordinal().range(colours);
 
-
         // 5. Load Data: https://d3-wiki.readthedocs.io/zh_CN/master/CSV/
         d3.csv("../visualization-data-output/coverageGrouped.csv", function (error, data) {
             if (error) throw error;
@@ -67,8 +66,22 @@
                 return key !== "Commit";
             });
 
-            // 7. Map parsed csv values (since they are initially strings) into actual integer values.
+            //7. Map parsed csv values (since they are initially strings) into actual integer values.
+            // Only map the values that have actual values.
+            data = data.filter(function (d) {          
+                if (typeof d["Branch Coverage %"] === 'undefined' ||
+                    typeof d["Line Coverage %"] === 'undefined' ||
+                    typeof d["Statement Coverage %"] === 'undefined' ||
+                    typeof d["Function Coverage %"] === 'undefined') {
+                    return false;
+                }
+                d.value = +d.value;
+                return true;
+            });
+            
+            //7b. Make each commit a smaller substring and start mapping data
             data.forEach(function (d) {
+                d.Commit = d.Commit.substring(0,4);
                 d.coverage = headers.map(function (type) {
                     return {
                         type: type,
@@ -87,12 +100,18 @@
             svg.append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
+                .call(xAxis)
+                .selectAll("text")
+                .attr("y", 0)
+                .attr("x", 9)
+                .attr("dy", ".35em")
+                .attr("transform", "rotate(90)")
+                .style("text-anchor", "start");
 
             svg.append("g")
                 .append("text")
                 .attr("x", width / 2)
-                .attr("y", height + 30)
+                .attr("y", -10)
                 .attr("transform", "rotate(0)")
                 .style("font-weight", "bold")
                 .style("text-anchor", "end")
