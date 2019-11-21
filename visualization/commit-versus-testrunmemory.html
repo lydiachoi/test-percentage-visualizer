@@ -8,7 +8,7 @@
         .y.axis path,
         .y.axis line {
             fill: none;
-            stroke: #000;
+            stroke:none;
             shape-rendering: crispEdges;
         }
 
@@ -54,11 +54,11 @@
         var yAxis = d3.svg.axis().scale(y).orient("left");
 
         // 4. Set colours of the bars
-        var colours = ["#506877", "#f08080", "#5b5048", "#f7ba9b"];
+        var colours = ["#fc9272", "#a6bddb"];
         var color = d3.scale.ordinal().range(colours);
 
         // 5. Load Data: https://d3-wiki.readthedocs.io/zh_CN/master/CSV/
-        d3.csv("../data/coverage.csv", function (error, data) {
+        d3.csv("../data/runTime.csv", function (error, data) {
             if (error) throw error;
 
             // 6. Gets all headers except Commit (can be set manually if needed to). Can to used for column selection.
@@ -68,22 +68,21 @@
 
             //7. Map parsed csv values (since they are initially strings) into actual integer values.
             data = data.filter(function (d) {          
-                if (typeof d["Branch Coverage %"] === 'undefined' ||
-                    typeof d["Line Coverage %"] === 'undefined' ||
-                    typeof d["Statement Coverage %"] === 'undefined' ||
-                    typeof d["Function Coverage %"] === 'undefined') {
+                if (typeof d["Runtime (s)"] === 'undefined' ||
+                    typeof d["Number of Tests Run"] === 'undefined') {
                     return false;
                 }
                 return true;
             });
             
             //7b. Make each commit a smaller substring and start mapping data
+            // Use parseFloat to ensure data with 's' (i.e. 30s) will parse correctly with precision
             data.forEach(function (d) {
                 d.Commit = d.Commit.substring(0,7);
                 d.coverage = headers.map(function (type) {
                     return {
                         type: type,
-                        value: +d[type]
+                        value: parseFloat(d[type])
                     };
                 });
             });
@@ -121,13 +120,13 @@
                 .call(yAxis);
 
             // 11. Formats the title for the label on the y-axis
-            svg.append("g")
-                .append("text")
-                .attr("y", 15)
-                .attr("transform", "rotate(-90)")
-                .style("font-weight", "bold")
-                .style("text-anchor", "end")
-                .text("Test Coverage %");
+            // svg.append("g")
+            //     .append("text")
+            //     .attr("y", 15)
+            //     .attr("transform", "rotate(-90)")
+            //     .style("font-weight", "bold")
+            //     .style("text-anchor", "end")
+            //     .text("Test Coverage %");
 
             // 12. Renders Data in our dataset, with DOM elements being mapped.
             // https://riptutorial.com/d3-js/example/16948/the-role-of-placeholders-in--enter--selections
