@@ -1,11 +1,10 @@
 BEGIN{
   ORS=",";
-  print ",Commit, (Pass/fail, Test Class, Heap Usage in MB)* \n";
+  SUM = 0;
+  print ",Commit, Total Heap Usage for all tests \n";
 }
-/Commit: / {print $2};
-/PASS/ {print "PASS"};
-/PASS/ {print $2}; 
-/PASS/ {print (NF==6 ? substr($(NF-3),2): $(NF-3))}
-/FAIL/ {print "FAIL"};
-/FAIL/ {print $2};
-/Ran all test suites.|This commit has no tests/ {print "\n"};
+
+/Commit: / {print $2, SUM=0};
+/PASS/ { SUM+= (NF==6 ? substr($(NF-3),2): $(NF-3))}
+/PASS/ { print SUM }
+/Ran all test suites.|This commit has no tests/ {print SUM,"\n"};
