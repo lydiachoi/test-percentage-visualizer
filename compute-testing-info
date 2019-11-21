@@ -22,11 +22,13 @@ RAW_COVERAGE="./data/raw/coverage.csv"
 RAW_TESTS="./data/raw/tests.csv"
 RAW_MEMORY="./data/raw/memory.csv"
 RAW_MEMORYTOTAL="./data/raw/memoryTotal.csv"
+RAW_RUNTIME="./data/raw/runTime.csv"
 
 OUTPUT_COVERAGE="./data/coverage.csv"
 OUTPUT_TESTS="./data/tests.csv"
 OUTPUT_MEMORY="./data/memory.csv"
 OUTPUT_MEMORYTOTAL="./data/memoryTotal.csv"
+OUTPUT_RUNTIME="./data/runTime.csv"
 
 # create a new work dir/tree based on the repo's HEAD, in the same dir as the script
 # this also creates and checks out a new branch with the same name as the work dir/tree
@@ -39,13 +41,18 @@ COMMITS=$(git -C $TEMP_DIR rev-list --no-merges --reverse HEAD) # add --max-coun
  # clears the file before writing to it
 > changedTestFiles.txt
 > $RAW_OUTPUT
+
 > $RAW_COVERAGE
 > $RAW_TESTS
 > $RAW_MEMORY
+> $RAW_MEMORYTOTAL
+> $RAW_RUNTIME
+
 > $OUTPUT_COVERAGE
 > $OUTPUT_TESTS
 > $OUTPUT_MEMORY
 > $OUTPUT_MEMORYTOTAL
+> $OUTPUT_RUNTIME
 
 for COMMIT in $COMMITS
 do
@@ -81,12 +88,14 @@ awk -f ./parsers/coverage.awk $RAW_OUTPUT > $RAW_COVERAGE
 awk -f ./parsers/tests.awk $RAW_OUTPUT > $RAW_TESTS
 awk -f ./parsers/memoryDynamic.awk $RAW_OUTPUT > $RAW_MEMORY
 awk -f ./parsers/memoryTotal.awk $RAW_OUTPUT > $RAW_MEMORYTOTAL
+awk -f ./parsers/runTime.awk $RAW_OUTPUT > $RAW_RUNTIME
 
 # apply formatting and save to output file
 awk -f ./parsers/format.awk $RAW_COVERAGE > $OUTPUT_COVERAGE
 awk -f ./parsers/format.awk $RAW_TESTS > $OUTPUT_TESTS
 awk -f ./parsers/format.awk $RAW_MEMORY > $OUTPUT_MEMORY
 awk -f ./parsers/format.awk $RAW_MEMORYTOTAL > $OUTPUT_MEMORYTOTAL
+awk -f ./parsers/format.awk $RAW_RUNTIME > $OUTPUT_RUNTIME
 
 # clean up the temporary work dir/tree and branch
 git -C $1 worktree remove $TEMP_DIR
