@@ -79,7 +79,7 @@
             // Use parseFloat to ensure data with 's' (i.e. 30s) will parse correctly with precision
             data.forEach(function (d) {
                 d.Commit = d.Commit.substring(0,7);
-                d.coverage = headers.map(function (type) {
+                d.runtime = headers.map(function (type) {
                     return {
                         type: type,
                         value: parseFloat(d[type])
@@ -91,7 +91,7 @@
             // https://jaketrent.com/post/use-d3-rangebands/
             xBar.domain(data.map(function (d) { return d.Commit; }));
             xChart.domain(headers).rangeRoundBands([0, xBar.rangeBand()]);
-            y.domain([0, d3.max(data, function (d) { return d3.max(d.coverage, function (d) { return d.value; }); })]);
+            y.domain([0, d3.max(data, function (d) { return d3.max(d.runtime, function (d) { return d.value; }); })]);
 
             // 9. Renders the x-axis
             svg.append("g")
@@ -153,7 +153,7 @@
                 .style('pointer-events', 'none');
 
             bars.selectAll("rect")
-                .data(function (d) { return d.coverage; })
+                .data(function (d) { return d.runtime; })
                 .enter().append("rect")
                 .attr("width", xChart.rangeBand())
                 .attr("x", function (d) { return xChart(d.type); })
@@ -260,7 +260,7 @@
                             .style("opacity", 1);
 
                         bars.selectAll("rect")
-                            .data(function (d) { return d.coverage; })
+                            .data(function (d) { return d.runtime; })
                             .enter().append("rect")
                             .attr("width", xChart.rangeBand())
                             .attr("x", function (d) { return xChart(d.type); })
