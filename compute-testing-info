@@ -66,7 +66,7 @@ do
 
         # output test coverage and memory usage information of commit to file
         bash ./get-coverage-and-memory $TEMP_DIR 2>&1 | tee -a $RAW_OUTPUT
-        bash ./get-changed-test-files $TEMP_DIR 2>&1 | tee -a changedTestFiles.txt
+        # bash ./get-changed-test-files $TEMP_DIR 2>&1 | tee -a changedTestFiles.txt
 
         # clean up the files back to the original commit state before switching
         git -C $TEMP_DIR checkout -q .
