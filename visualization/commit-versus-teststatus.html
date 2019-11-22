@@ -30,7 +30,7 @@
         var color = d3.scaleOrdinal().range(colours);
 
         // 3. Load Data: https://d3-wiki.readthedocs.io/zh_CN/master/CSV/
-        d3.csv("../visualization-data-output/testPassed.csv", function (error, data) {
+        d3.csv("../data/tests.csv", function (error, data) {
             if (error) throw error;
 
             // 4. Gets all headers except Commit (can be set manually if needed to). Can to used for column selection.
