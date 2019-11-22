@@ -26,11 +26,12 @@
         var x = d3.scaleLinear().rangeRound([0, width]);
         // Sets the scaling of the full y-axis chart
         var y = d3.scaleBand().rangeRound([0, height]).padding(0.1);
+        // TODO change colors??
         var colours = ["#b0c4de", "#d8d8d8"];
         var color = d3.scaleOrdinal().range(colours);
 
         // 3. Load Data: https://d3-wiki.readthedocs.io/zh_CN/master/CSV/
-        d3.csv("../visualization-data-output/testPassed.csv", function (error, data) {
+        d3.csv("../visualization-data-output/testMemoryUsage.csv", function (error, data) {
             if (error) throw error;
 
             // 4. Gets all headers except Commit (can be set manually if needed to). Can to used for column selection.
@@ -46,7 +47,7 @@
                         value: +d[type]
                     };
                 });
-            })
+            });
 
             // 6. Common pattern used in many examples for v3 and v4. Set the domain ranges here.
             // https://jaketrent.com/post/use-d3-rangebands/
@@ -67,7 +68,7 @@
                 .style('font', "9px sans-serif")
                 .style("font-weight", "bold")
                 .style("text-anchor", "end")
-                .text("Number of Tests");
+                .text("Heap Usage Per Commit");
 
             // 8. Renders the y-axis
             svg.append("g")
@@ -99,7 +100,7 @@
                 .style('display', 'none')
                 .style('pointer-events', 'none');
 
-            // 11. Render Test Passed bar
+            // 11. Render Heap Usage Bar
             svg.selectAll(".bar1")
                 .data(data)
                 .enter().append("rect")
@@ -107,39 +108,15 @@
                 .style('opacity', 0.5)
                 .attr("x", 0)
                 .attr("y", function (d) { return y(d.Commit) + 5 })
-                .attr("width", function (d) { return x(d["Tests Passed"]); })
+                .attr("width", function (d) { return x(d["Heap"]); })
                 .attr("height", y.bandwidth() - 10)
                 .on('mouseover', function mouseover() {
                     div.style('display', 'inline');
                 })
                 .on('mousemove', function mousemove() {
-                    var d = d3.select(this).data()[0]
+                    const d = d3.select(this).data()[0];
                     div
-                        .html('Total Tests: ' + d["Tests"] + '</br>' + 'Tests Passed: ' + d["Tests Passed"])
-                        .style('left', (d3.event.pageX) + 'px')
-                        .style('top', (d3.event.pageY) + 'px');
-                })
-                .on('mouseout', function mouseout() {
-                    div.style('display', 'none');
-                });
-
-            // 12. Render Tests bar
-            svg.selectAll(".bar2")
-                .data(data)
-                .enter().append("rect")
-                .style('fill', "#d8d8d8")
-                .style('opacity', 0.5)
-                .attr("x", 0)
-                .attr("y", function (d) { return y(d.Commit); })
-                .attr("width", function (d) { return x(d["Tests"]); })
-                .attr("height", y.bandwidth())
-                .on('mouseover', function mouseover() {
-                    div.style('display', 'inline');
-                })
-                .on('mousemove', function mousemove() {
-                    var d = d3.select(this).data()[0]
-                    div
-                        .html('Total Tests: ' + d["Tests"] + '</br>' + 'Tests Passed: ' + d["Tests Passed"])
+                        .html('Heap Usage: ' + d["Heap"])
                         .style('left', (d3.event.pageX) + 'px')
                         .style('top', (d3.event.pageY) + 'px');
                 })
