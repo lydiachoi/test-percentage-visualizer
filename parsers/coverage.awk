@@ -1,6 +1,6 @@
 BEGIN{
   ORS=",";
-  print ",Commit,Line Coverage %,Statement Coverage %,Branch Coverage %,Function Coverage %";
+  print ",Commit,Line Coverage %,Statement Coverage %,Branch Coverage %,Function Coverage %\n";
 }
 
 /Commit: / {print $2};

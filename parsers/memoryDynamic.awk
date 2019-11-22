@@ -1,6 +1,6 @@
 BEGIN{
   ORS=",";
-  print ",Commit,Pass/fail,Test Class,Heap Usage in MB";
+  print ",Commit,Pass/fail,Test Class,Heap Usage in MB\n";
 }
 /Commit: / {print $2};
 /PASS/ {print "PASS"};

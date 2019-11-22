@@ -1,7 +1,7 @@
 BEGIN{
   ORS=",";
   SUM = 0;
-  print ",Commit, Total Heap Usage for all tests \n";
+  print ",Commit, Total Heap Usage for all tests\n";
 }
 
 /Commit: / {print $2, SUM=0};
