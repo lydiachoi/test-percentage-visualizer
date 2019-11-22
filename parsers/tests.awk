@@ -1,6 +1,6 @@
 BEGIN{
   ORS=",";
-  print ",Commit,Test Passed,Tests";
+  print ",Commit,Test Passed,Tests\n";
 }
 
 /Commit: / {print $2};
