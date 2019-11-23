@@ -12,174 +12,223 @@
         // 1. Set Margins: Recommended by one of the creators of D3 - https://bl.ocks.org/mbostock/3019563
         var margin = { top: 20, right: 130, bottom: 130, left: 70 };
         var width = 960 - margin.left - margin.right;
-        var height = 1200 - margin.top - margin.bottom;
+        var height = 1000 - margin.top - margin.bottom;
+        var aspectRatio = width / height;
 
-        // 2. Create SVG - Scalable Vector Graphics
-        // NOTE: Can add more svgs for multiple graphs displayed
-        var svg = d3.select("body").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        // Made it more responsive using this example:
+        // TUTORIAL: http://bl.ocks.org/enactdev/a647e60b209e67602304
+        function changeAspectRatio() {
+            clientWidth = window.innerWidth;
+            clientHeight = window.innerHeight;
+            clientAspectRatio = clientWidth / clientHeight;
 
-        // Sets the scaling of the full x-axis chart
-        var x = d3.scaleLinear().rangeRound([0, width]);
-        // Sets the scaling of the full y-axis chart
-        var y = d3.scaleBand().rangeRound([0, height]).padding(0.1);
-        var colours = ["#b0c4de", "#d8d8d8"];
-        var color = d3.scaleOrdinal().range(colours);
+            if (clientAspectRatio > aspectRatio) {
+                h = clientHeight;
+                w = h * aspectRatio;
+            } else {
+                w = clientWidth;
+                h = w / aspectRatio;
+            }
 
-        // 3. Load Data: https://d3-wiki.readthedocs.io/zh_CN/master/CSV/
-        d3.csv("../data/tests.csv", function (error, data) {
-            if (error) throw error;
+            width = w - margin.left - margin.right;
+            height = h - margin.top - margin.bottom;
 
-            // 4. Gets all headers except Commit (can be set manually if needed to). Can to used for column selection.
-            var headers = d3.keys(data[0]).filter(function (key) {
-                return key !== "Commit";
-            });
+        };
+        changeAspectRatio();
 
-            //5. Map parsed csv values (since they are initially strings) into actual integer values.
-            data = data.filter(function (d) {    
-                if (typeof d["Test Passed"] === 'undefined' ||
-                    typeof d["Tests"] === 'undefined' || 
-                    d["Test Passed"] === "" ||
-                    d["Tests"] === "") {
-                    return false;
-                }
-                return true;
-            });
+        function renderChart() {
+            // 2. Create SVG - Scalable Vector Graphics
+            // NOTE: Can add more svgs for multiple graphs displayed
+            var svg = d3.select("body").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            data.forEach(function (d) {
-                d.Commit = d.Commit.substring(0,7);
-                d.tests = headers.map(function (type) {
-                    return {
-                        type: type,
-                        value: +d[type]
-                    };
+            // Sets the scaling of the full x-axis chart
+            var x = d3.scaleLinear().rangeRound([0, width]);
+            // Sets the scaling of the full y-axis chart
+            var y = d3.scaleBand().rangeRound([0, height]).padding(0.1);
+            var colours = ["#b0c4de", "#d8d8d8"];
+            var color = d3.scaleOrdinal().range(colours);
+
+            // 3. Load Data: https://d3-wiki.readthedocs.io/zh_CN/master/CSV/
+            d3.csv("../data/tests.csv", function (error, data) {
+                if (error) throw error;
+
+                // 4. Gets all headers except Commit (can be set manually if needed to). Can to used for column selection.
+                var headers = d3.keys(data[0]).filter(function (key) {
+                    return key !== "Commit";
                 });
+
+                //5. Map parsed csv values (since they are initially strings) into actual integer values.
+                data = data.filter(function (d) {
+                    if (typeof d["Test Passed"] === 'undefined' ||
+                        typeof d["Tests"] === 'undefined' ||
+                        d["Test Passed"] === "" ||
+                        d["Tests"] === "") {
+                        return false;
+                    }
+                    return true;
+                });
+
+                data.forEach(function (d) {
+                    d.Commit = d.Commit.substring(0, 7);
+                    d.tests = headers.map(function (type) {
+                        return {
+                            type: type,
+                            value: +d[type]
+                        };
+                    });
+                })
+
+                // 6. Common pattern used in many examples for v3 and v4. Set the domain ranges here. 
+                // https://jaketrent.com/post/use-d3-rangebands/ 
+                x.domain([0, d3.max(data, function (d) { return d3.max(d.tests, function (d) { return d.value; }); })]);
+                y.domain(data.map(function (d) { return d.Commit; }));
+
+                // 7. Renders the x-axis
+                svg.append("g")
+                    .attr("class", "axis x_axis")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(d3.axisBottom(x));
+
+                svg.append("g")
+                    .append("text")
+                    .attr("x", width / 2)
+                    .attr("y", height + 30)
+                    .attr("transform", "rotate(0)")
+                    .style('font', "9px sans-serif")
+                    .style("font-weight", "bold")
+                    .style("text-anchor", "end")
+                    .text("Number of Tests");
+
+                svg.append("g")
+                    .append("text")
+                    .attr("x", width / 2)
+                    .attr("y", 0)
+                    .attr("transform", "rotate(0)")
+                    .style('font', "sans-serif")
+                    .style("font", "14px times")
+                    .style("font-weight", "bold")
+                    .style("text-anchor", "end")
+                    .style("text-decoration", "underline")
+                    .text("Number of Tests Passed and Tests Run versus Commit");
+
+                // 8. Renders the y-axis
+                svg.append("g")
+                    .attr("class", "axis y_axis")
+                    .call(d3.axisLeft(y));
+
+                // 9. Formats the title for the label on the y-axis
+                svg.append("g")
+                    .append("text")
+                    .attr("x", 15)
+                    .attr("y", -10)
+                    .attr("transform", "rotate(0)")
+                    .style("text-anchor", "end")
+                    .style('font', "9px sans-serif")
+                    .style("font-weight", "bold")
+                    .text("Commit");
+
+                // 10. Declare div object for tooltip
+                var div = d3.select('body').append('div')
+                    .style('position', "absolute")
+                    .style('text-align', "center")
+                    .style('font', "9px sans-serif")
+                    .style('border-radius', "5px")
+                    .style('padding', "5px")
+                    .style('background', "#000000")
+                    .style('color', "#ffffff")
+                    .style('text-align', "center")
+                    .style('margin-top', "10px")
+                    .style('display', 'none')
+                    .style('pointer-events', 'none');
+
+                // 11. Render Test Passed bar
+                svg.selectAll(".bar1")
+                    .data(data)
+                    .enter().append("rect")
+                    .style('fill', "#4682b4")
+                    .style('opacity', 0.5)
+                    .attr("x", 0)
+                    .attr("y", function (d) { return y(d.Commit) + 5 })
+                    .attr("width", function (d) { return x(d["Test Passed"]); })
+                    .attr("height", y.bandwidth() - 10)
+                    .on('mouseover', function mouseover() {
+                        div.style('display', 'inline');
+                    })
+                    .on('mousemove', function mousemove() {
+                        var d = d3.select(this).data()[0]
+                        div
+                            .html('Total Tests: ' + d["Tests"] + '</br>' + 'Tests Passed: ' + d["Test Passed"])
+                            .style('left', (d3.event.pageX) + 'px')
+                            .style('top', (d3.event.pageY) + 'px');
+                    })
+                    .on('mouseout', function mouseout() {
+                        div.style('display', 'none');
+                    });
+
+                // 12. Render Tests bar
+                svg.selectAll(".bar2")
+                    .data(data)
+                    .enter().append("rect")
+                    .style('fill', "#d8d8d8")
+                    .style('opacity', 0.5)
+                    .attr("x", 0)
+                    .attr("y", function (d) { return y(d.Commit); })
+                    .attr("width", function (d) { return x(d["Tests"]); })
+                    .attr("height", y.bandwidth())
+                    .on('mouseover', function mouseover() {
+                        div.style('display', 'inline');
+                    })
+                    .on('mousemove', function mousemove() {
+                        var d = d3.select(this).data()[0]
+                        div
+                            .html('Total Tests: ' + d["Tests"] + '</br>' + 'Tests Passed: ' + d["Test Passed"])
+                            .style('left', (d3.event.pageX) + 'px')
+                            .style('top', (d3.event.pageY) + 'px');
+                    })
+                    .on('mouseout', function mouseout() {
+                        div.style('display', 'none');
+                    });
+
+                // 14. Render legend: 
+                // https://www.howtobuildsoftware.com/index.php/how-do/b8Hi/javascript-d3js-how-to-add-legend-to-an-aster-plot-d3-js
+                var legend = svg.selectAll(".legend")
+                    .data(headers.slice())
+                    .enter().append("g")
+                    .attr("class", "legend")
+                    .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
+
+                legend.append("rect")
+                    .attr("x", width + 110)
+                    .attr("width", 18)
+                    .attr("height", 18)
+                    .style("fill", color);
+
+                legend.append("text")
+                    .attr("x", width + 100)
+                    .attr("y", 9)
+                    .attr("dy", ".32em")
+                    .style('font', "9px sans-serif")
+                    .style("text-anchor", "end")
+                    .text(function (d) { return d; });
             })
+        };
 
-            // 6. Common pattern used in many examples for v3 and v4. Set the domain ranges here. 
-            // https://jaketrent.com/post/use-d3-rangebands/ 
-            x.domain([0, d3.max(data, function (d) { return d3.max(d.tests, function (d) { return d.value; }); })]);
-            y.domain(data.map(function (d) { return d.Commit; }));
-
-            // 7. Renders the x-axis
-            svg.append("g")
-                .attr("class", "axis x_axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x));
-
-            svg.append("g")
-                .append("text")
-                .attr("x", width / 2)
-                .attr("y", height + 30)
-                .attr("transform", "rotate(0)")
-                .style('font', "9px sans-serif")
-                .style("font-weight", "bold")
-                .style("text-anchor", "end")
-                .text("Number of Tests");
-
-            // 8. Renders the y-axis
-            svg.append("g")
-                .attr("class", "axis y_axis")
-                .call(d3.axisLeft(y));
-
-            // 9. Formats the title for the label on the y-axis
-            svg.append("g")
-                .append("text")
-                .attr("x", 15)
-                .attr("y", -10)
-                .attr("transform", "rotate(0)")
-                .style("text-anchor", "end")
-                .style('font', "9px sans-serif")
-                .style("font-weight", "bold")
-                .text("Commit");
-
-            // 10. Declare div object for tooltip
-            var div = d3.select('body').append('div')
-                .style('position', "absolute")
-                .style('text-align', "center")
-                .style('font', "9px sans-serif")
-                .style('border-radius', "5px")
-                .style('padding', "5px")
-                .style('background', "#000000")
-                .style('color', "#ffffff")
-                .style('text-align', "center")
-                .style('margin-top', "10px")
-                .style('display', 'none')
-                .style('pointer-events', 'none');
-
-            // 11. Render Test Passed bar
-            svg.selectAll(".bar1")
-                .data(data)
-                .enter().append("rect")
-                .style('fill', "#4682b4")
-                .style('opacity', 0.5)
-                .attr("x", 0)
-                .attr("y", function (d) { return y(d.Commit) + 5 })
-                .attr("width", function (d) { return x(d["Test Passed"]); })
-                .attr("height", y.bandwidth() - 10)
-                .on('mouseover', function mouseover() {
-                    div.style('display', 'inline');
-                })
-                .on('mousemove', function mousemove() {
-                    var d = d3.select(this).data()[0]
-                    div
-                        .html('Total Tests: ' + d["Tests"] + '</br>' + 'Tests Passed: ' + d["Test Passed"])
-                        .style('left', (d3.event.pageX) + 'px')
-                        .style('top', (d3.event.pageY) + 'px');
-                })
-                .on('mouseout', function mouseout() {
-                    div.style('display', 'none');
-                });
-
-            // 12. Render Tests bar
-            svg.selectAll(".bar2")
-                .data(data)
-                .enter().append("rect")
-                .style('fill', "#d8d8d8")
-                .style('opacity', 0.5)
-                .attr("x", 0)
-                .attr("y", function (d) { return y(d.Commit); })
-                .attr("width", function (d) { return x(d["Tests"]); })
-                .attr("height", y.bandwidth())
-                .on('mouseover', function mouseover() {
-                    div.style('display', 'inline');
-                })
-                .on('mousemove', function mousemove() {
-                    var d = d3.select(this).data()[0]
-                    div
-                        .html('Total Tests: ' + d["Tests"] + '</br>' + 'Tests Passed: ' + d["Test Passed"])
-                        .style('left', (d3.event.pageX) + 'px')
-                        .style('top', (d3.event.pageY) + 'px');
-                })
-                .on('mouseout', function mouseout() {
-                    div.style('display', 'none');
-                });
-
-            // 14. Render legend: 
-            // https://www.howtobuildsoftware.com/index.php/how-do/b8Hi/javascript-d3js-how-to-add-legend-to-an-aster-plot-d3-js
-            var legend = svg.selectAll(".legend")
-                .data(headers.slice())
-                .enter().append("g")
-                .attr("class", "legend")
-                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
-
-            legend.append("rect")
-                .attr("x", width + 110)
-                .attr("width", 18)
-                .attr("height", 18)
-                .style("fill", color);
-
-            legend.append("text")
-                .attr("x", width + 100)
-                .attr("y", 9)
-                .attr("dy", ".32em")
-                .style('font', "9px sans-serif")
-                .style("text-anchor", "end")
-                .text(function (d) { return d; });
-        });
+        renderChart();
+        // Again, using the example: http://bl.ocks.org/enactdev/a647e60b209e67602304
+        var resizeTimer;
+        window.onresize = function (event) {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                var s = d3.selectAll('svg');
+                s = s.remove();
+                changeAspectRatio();
+                renderChart();
+            }, 100);
+        }
     </script>
 
 </body>
