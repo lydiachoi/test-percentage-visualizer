@@ -31,7 +31,7 @@
         var color = d3.scaleOrdinal().range(colours);
 
         // 3. Load Data: https://d3-wiki.readthedocs.io/zh_CN/master/CSV/
-        d3.csv("../visualization-data-output/testMemoryUsage.csv", function (error, data) {
+        d3.csv("../visualization-mock-data-output/testMemoryUsage.csv", function (error, data) {
             if (error) throw error;
 
             // 4. Gets all headers except Commit (can be set manually if needed to). Can to used for column selection.
@@ -41,6 +41,7 @@
 
             // 5. Map parsed csv values (since they are initially strings) into actual integer values.
             data.forEach(function (d) {
+                d.Commit = d.Commit.substring(0,7);
                 d.tests = headers.map(function (type) {
                     return {
                         type: type,
@@ -108,7 +109,7 @@
                 .style('opacity', 0.5)
                 .attr("x", 0)
                 .attr("y", function (d) { return y(d.Commit) + 5 })
-                .attr("width", function (d) { return x(d["Heap"]); })
+                .attr("width", function (d) { return x(d["Total Heap Usage for all tests"]); })
                 .attr("height", y.bandwidth() - 10)
                 .on('mouseover', function mouseover() {
                     div.style('display', 'inline');
@@ -116,7 +117,7 @@
                 .on('mousemove', function mousemove() {
                     const d = d3.select(this).data()[0];
                     div
-                        .html('Heap Usage: ' + d["Heap"])
+                        .html('Heap Usage: ' + d["Total Heap Usage for all tests"])
                         .style('left', (d3.event.pageX) + 'px')
                         .style('top', (d3.event.pageY) + 'px');
                 })
