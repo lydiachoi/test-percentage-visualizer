@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <style>
+        .y.axis path,
+        .y.axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .x.axis path,
+        .x.axis line {
+            fill: none;
+            stroke: #fff;
+            shape-rendering: crispEdges;
+        }
+
+        body {
+            font: 10px helvetica;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <script>
+
+
+        // Could refactor this to make it more programmatic
+        // 1. Set Margins: Recommended by one of the creators of D3 - https://bl.ocks.org/mbostock/3019563
+        var margin = { top: 20, right: 80, bottom: 50, left: 50 };
+        var width = 960 - margin.left - margin.right;
+        var height = 500 - margin.top - margin.bottom;
+        var aspectRatio = width/height;
+
+        // Made it more responsive using this example:
+        // TUTORIAL: http://bl.ocks.org/enactdev/a647e60b209e67602304
+        function changeAspectRatio() {
+            clientWidth = window.innerWidth;
+            clientHeight = window.innerHeight;
+            clientAspectRatio = clientWidth / clientHeight;
+
+            if (clientAspectRatio > aspectRatio) {
+                h = clientHeight;
+                w = h * aspectRatio;
+            } else {
+                w = clientWidth;
+                h = w / aspectRatio;
+            }
+
+            width = w - margin.left - margin.right;
+            height = h - margin.top - margin.bottom;
+
+        };
+
+        changeAspectRatio();
+        
+        function renderChart() {
+        // 2. Create SVG - Scalable Vector Graphics
+        // NOTE: Can add more svgs for multiple graphs displayed
+        var svg = d3.select("body").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // Sets the actual scaling of the bars with regards to x-axis
+        var xLine = d3.scale.ordinal().rangeRoundPoints([0, width], .2);
+        // Sets the scaling of the full y-axis chart
+        var y = d3.scale.linear().range([height, 0]);
+
+        // Sets both the axis orientation (where to render them)
+        var xAxis = d3.svg.axis().scale(xLine).orient("bottom");
+        var yAxis = d3.svg.axis().scale(y).orient("left");
+
+        // 4. Set colours of the bars
+        var color = d3.scale.category10();
+
+        // 5. Load Data: https://d3-wiki.readthedocs.io/zh_CN/master/CSV/
+        
+            d3.csv("../data/coverage.csv", function (error, data) {
+                if (error) throw error;
+
+                // 6. Get column header names
+                var headers = d3.keys(data[0]).filter(function (key) {
+                    return key !== "Commit";
+                });
+
+                //7. Remove rows without any coverage information
+                data = data.filter(function (d) {
+                    if (typeof d["Branch Coverage %"] === 'undefined' ||
+                        typeof d["Line Coverage %"] === 'undefined' ||
+                        typeof d["Statement Coverage %"] === 'undefined' ||
+                        typeof d["Function Coverage %"] === 'undefined') {
+                        return false;
+                    }
+                    return true;
+                });
+
+                //7b. Wrangle data for line charting
+                var coverages = headers.map(function(type) {
+                    return {
+                        type: type,
+                        values: data.map(function(d) {
+                            return {
+                                commit: d.Commit.substring(0, 7),
+                                percentage: +d[type]
+                            };
+                        })
+                    }
+                });
+
+                // 8. Common pattern used in many examples for v3 and v4. Set the domain ranges here. 
+                // https://jaketrent.com/post/use-d3-rangebands/
+                xLine.domain(data.map(function (d) { return d.Commit.substring(0, 7); }));
+                y.domain([0, d3.max(coverages, function (d) { return d3.max(d.values, function (d) { return d.percentage; }); })]);
+
+                // 9. Renders the x-axis
+                svg.append("g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(0," + height + ")")
+                    .call(xAxis)
+                    .selectAll("text")
+                    .attr("y", 0)
+                    .attr("x", 9)
+                    .attr("dy", ".35em")
+                    .attr("transform", "rotate(90)")
+                    .style("text-anchor", "start");
+
+                svg.append("g")
+                    .append("text")
+                    .attr("x", width / 2)
+                    .attr("y", -10)
+                    .attr("transform", "rotate(0)")
+                    .style('font', "20 px helvetica")
+                    .style("font-weight", "bold")
+                    .style("text-anchor", "end")
+                    .style("text-decoration", "underline")
+                    .text("Commit vs Coverage");
+
+                // 10. Renders the y-axis
+                svg.append("g")
+                    .attr("class", "y axis")
+                    .call(yAxis);
+
+                // 11. Formats the title for the label on the y-axis
+                svg.append("g")
+                    .append("text")
+                    .attr("y", 15)
+                    .attr("transform", "rotate(-90)")
+                    .style("font-weight", "bold")
+                    .style("text-anchor", "end")
+                    .text("Test Coverage %");
+
+                // 12. Renders Data in our dataset, with DOM elements being mapped.
+                // Based on https://www.d3-graph-gallery.com/graph/line_several_group.html
+                // and https://bl.ocks.org/salvob41/df700ff6bbeed285de043955785775c5
+                var lines = svg.selectAll(".line")
+                    .data(coverages)
+                    .enter().append("g")
+                
+                lines.append("path")
+                        .attr("fill", "none")
+                        .attr("stroke", function(d){ return color(d.type) })
+                        .attr("stroke-width", 2)
+                        .attr("d", function(d) {
+                            return d3.svg.line()
+                                .x(function(d) { return xLine(d.commit); })
+                                .y(function(d) { return y(d.percentage); })
+                                (d.values)
+                        });
+                
+                lines.append("text")
+                    .datum(function(d) { return {type: d.type, value: d.values[d.values.length - 1]}; })
+                    .attr("transform", function(d) { return "translate(" + xLine(d.value.commit) + "," + y(d.value.percentage) + ")"; })
+                    .attr("x", 4)
+                    .attr("dy", ".35em")
+                    .attr("fill", function(d){ return color(d.type) })
+                    .text(function(d) { return d.type; })
+                
+            })
+        };
+
+        renderChart();
+
+        // Again, using the example: http://bl.ocks.org/enactdev/a647e60b209e67602304
+        var resizeTimer;
+        window.onresize = function (event) {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                var s = d3.selectAll('svg');
+                s = s.remove();
+                changeAspectRatio();
+                renderChart();
+            }, 100);
+        }
+
+
+    </script>
+
+</body>
+
+</html>
