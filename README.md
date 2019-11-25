@@ -42,10 +42,10 @@ So we scrapped the first analysis and visualization, modified the other and, col
 
 The new visualization consists of the following graphs:
 
-1. `teststatus.html`: a bar graph showing the number of passing tests and total number of tests for each commit
-2. `coverage-bar.html`: a bar graph showing each of the coverage types (line, statement, branch, and function) for each commit
-3. `coverage-line.html`: a coverage line graph of the same information as above, for easier legibility
-4. `testruntime.html`: a bar graph showing the time taken to run the test suite and total number of tests for each commit
+1. `teststatus.html`: A bar graph showing the number of passing tests and total number of tests for each commit
+2. `coverage-bar.html`: A bar graph showing each of the coverage types (line, statement, branch, and function) for each commit
+3. `coverage-line.html`: A coverage line graph of the same information as above, for easier legibility
+4. `testruntime.html`: A bar graph showing the time taken to run the test suite and total number of tests for each commit
 5. A bar graph showing memory information &lt;shannon to describe&gt;
 
 ### The Outcome of End-User Testing
@@ -53,6 +53,6 @@ The new visualization consists of the following graphs:
 The final design includes the following features:
 
 - 5 distinct graphs displaying status of tests, coverage, runtime, and memory usage over the lifetime of the project repository
-- an optional second argument passed to analyze every nth commit to display in the visualizations: `./compute-testing-info <repo-path> [<subsample-freq>]`
-- the line graph displaying coverage was added as a result of feedback from user acceptance testing, to improve legibility over large numbers of commits
-- user acceptance testing revealed that the number of passing tests/total number of tests and runtime of test suite/total number of tests graphs were helpful: users indicated that they could see if not enough tests were being added at certain milestones in the project lifetime, or if too many tests were being added at once, potentially impacting performance
+- An optional second argument passed to analyze every nth commit to display in the visualizations: `./compute-testing-info <repo-path> [<subsample-freq>]`
+- The line graph displaying coverage was added as a result of feedback from user acceptance testing, to improve legibility over large numbers of commits
+- User acceptance testing revealed that the number of passing tests/total number of tests and runtime of test suite/total number of tests graphs were helpful: users indicated that they could see if not enough tests were being added at certain milestones in the project lifetime, or if too many tests were being added at once, potentially impacting performance
