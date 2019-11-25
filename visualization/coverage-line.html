@@ -70,7 +70,7 @@
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         // Sets the actual scaling of the bars with regards to x-axis
-        var xLine = d3.scale.ordinal().rangeRoundPoints([0, width], .2);
+        var xLine = d3.scale.ordinal().rangePoints([0, width], .2);
         // Sets the scaling of the full y-axis chart
         var y = d3.scale.linear().range([height, 0]);
 
@@ -147,6 +147,12 @@
                 svg.append("g")
                     .attr("class", "y axis")
                     .call(yAxis);
+                
+                // add grid lines across the y-axis
+                svg.append("g")
+                    .attr("class", "y axis")
+                    .style("stroke-dasharray", ("3,3"))
+                    .call(yAxis.tickSize(-width).tickFormat(""))
 
                 // 11. Formats the title for the label on the y-axis
                 svg.append("g")
