@@ -10,9 +10,29 @@
         // NOTE, this is now using D3 v4!!
         // Could refactor this to make it more programmatic
         // 1. Set Margins: Recommended by one of the creators of D3 - https://bl.ocks.org/mbostock/3019563
-        var margin = { top: 20, right: 130, bottom: 30, left: 40 };
+        var margin = { top: 20, right: 130, bottom: 40, left: 50 };
         var width = 960 - margin.left - margin.right;
         var height = 1200 - margin.top - margin.bottom;
+        var aspectRatio = width / height;
+
+        // Made it more responsive using this example:
+        // TUTORIAL: http://bl.ocks.org/enactdev/a647e60b209e67602304
+        function changeAspectRatio() {
+            clientWidth = window.innerWidth;
+            clientHeight = window.innerHeight;
+            clientAspectRatio = clientWidth / clientHeight;
+            if (clientAspectRatio > aspectRatio) {
+                h = clientHeight;
+                w = h * aspectRatio;
+            } else {
+                w = clientWidth;
+                h = w / aspectRatio;
+            }
+            width = w - margin.left - margin.right;
+            height = h - margin.top - margin.bottom;
+        };
+
+        changeAspectRatio();
 
         // 2. Create SVG - Scalable Vector Graphics
         // NOTE: Can add more svgs for multiple graphs displayed
@@ -26,7 +46,6 @@
         var x = d3.scaleLinear().rangeRound([0, width]);
         // Sets the scaling of the full y-axis chart
         var y = d3.scaleBand().rangeRound([0, height]).padding(0.1);
-        // TODO change colors??
         var colours = ["#b0c4de", "#d8d8d8"];
         var color = d3.scaleOrdinal().range(colours);
 
