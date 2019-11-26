@@ -6,10 +6,11 @@ Summary: A visualizer tool to display testing related information per commits. T
 
 1. Clone and cd into the repo
 2. Run the command `./compute-testing-info <repo-path> [<subsample-freq>]`
-3. If you do not have it, install Python to your system
+3. If you do not have it, install Python 3 to your system
 4. Once Python is installed, in a terminal run `python -m http.server 8000` (or another port of choice) to start a local http server
 5. In a NEW terminal run `start <browser> http://localhost:<port>/<path_to_html_file>` on Windows, `open <browser> http://localhost:<port>/<path_to_html_file>` on MacOS, or `browser http://localhost:<port>/<path_to_html_file>` on Linux. For example, `start firefox http://localhost:8000/visualization/teststatus.html` will open the test status (pass/fail) visualization in Firefox on Windows
-6. Interact with the visualization!
+6. Interact with the visualization. Some features include tooltips when mousing over the bar graphs. This shows the values of each bar for more precision. The legend of some graphs are also
+interactive, which would isolate certain bars.
 
 ##### NOTE: Since the libraries are called by the browser, you will need an active internet connection.
 
@@ -42,10 +43,10 @@ So we scrapped the first analysis and visualization, modified the other and, col
 
 The new visualization consists of the following graphs:
 
-1. `teststatus.html`: A bar graph showing the number of passing tests and total number of tests for each commit
-2. `coverage-bar.html`: A bar graph showing each of the coverage types (line, statement, branch, and function) for each commit
-3. `coverage-line.html`: A coverage line graph of the same information as above, for easier legibility
-4. `testruntime.html`: A bar graph showing the time taken to run the test suite and total number of tests for each commit
+1. `teststatus.html`: A bar graph showing the number of passing tests and total number of tests for each commit. This is also an interactive graph with mouse tooltips.
+2. `coverage-bar.html`: A bar graph showing each of the coverage types (line, statement, branch, and function) for each commit. This is also an interactive graph with mouse tooltips and legend function.
+3. `coverage-line.html`: A coverage line graph of the same information as above, for easier legibility and a better representation of the repository as a whole.
+4. `testruntime.html`: A bar graph showing the time taken to run the test suite and total number of tests for each commit. This is also an interactive graph with mouse tooltips and legend function.
 5. A bar graph showing memory information &lt;shannon to describe&gt;
 
 ### The Outcome of End-User Testing
@@ -55,4 +56,5 @@ The final design includes the following features:
 - 5 distinct graphs displaying status of tests, coverage, runtime, and memory usage over the lifetime of the project repository
 - An optional second argument passed to analyze every nth commit to display in the visualizations: `./compute-testing-info <repo-path> [<subsample-freq>]`
 - The line graph displaying coverage was added as a result of feedback from user acceptance testing, to improve legibility over large numbers of commits
+- Being able to hover the mouse over the bar graphs to give exact results is useful (seen in the User test video).
 - User acceptance testing revealed that the number of passing tests/total number of tests and runtime of test suite/total number of tests graphs were helpful: users indicated that they could see if not enough tests were being added at certain milestones in the project lifetime, or if too many tests were being added at once, potentially impacting performance
