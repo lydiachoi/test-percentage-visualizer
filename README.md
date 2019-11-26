@@ -47,7 +47,7 @@ The new visualization consists of the following graphs:
 2. `coverage-bar.html`: A bar graph showing each of the coverage types (line, statement, branch, and function) for each commit. This is also an interactive graph with mouse tooltips and legend function.
 3. `coverage-line.html`: A coverage line graph of the same information as above, for easier legibility and a better representation of the repository as a whole.
 4. `testruntime.html`: A bar graph showing the time taken to run the test suite and total number of tests for each commit. This is also an interactive graph with mouse tooltips and legend function.
-5. A bar graph showing memory information &lt;shannon to describe&gt;
+5. `heap-usage.html`: A bar graph showing the total memory used (in MB of heap usage) on all unit tests per commit. This is also an interactive graph with mouse tooltips and a legend function.
 
 ### The Outcome of End-User Testing
 
@@ -69,6 +69,9 @@ The final design includes the following features:
 
 ### Coverage Line Chart
 ![Coverage Line Chart](./photos/coverage-line.png)
+
+### Memory Usage Chart
+![Memory Usage Chart](./photos/heap-usage.png)
 
 ### Test Runtime
 ![Test Runtime](./photos/test-runtime.png)
