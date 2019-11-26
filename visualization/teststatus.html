@@ -46,9 +46,9 @@
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             // Sets the scaling of the full x-axis chart
-            var x = d3.scaleLinear().rangeRound([0, width]);
+            var x = d3.scaleLinear().range([0, width]);
             // Sets the scaling of the full y-axis chart
-            var y = d3.scaleBand().rangeRound([0, height]).padding(0.1);
+            var y = d3.scaleBand().range([0, height]).padding(0.1);
             var colours = ["#b0c4de", "#d8d8d8"];
             var color = d3.scaleOrdinal().range(colours);
 
@@ -100,7 +100,7 @@
                     .attr("transform", "rotate(0)")
                     .style('font', "9px helvetica")
                     .style("font-weight", "bold")
-                    .style("text-anchor", "end")
+                    .style("text-anchor", "middle")
                     .text("Number of Tests");
 
                 svg.append("g")
@@ -110,7 +110,7 @@
                     .attr("transform", "rotate(0)")
                     .style('font', "14 px helvetica")
                     .style("font-weight", "bold")
-                    .style("text-anchor", "end")
+                    .style("text-anchor", "middle")
                     .style("text-decoration", "underline")
                     .text("Number of Tests Passed and Tests Run versus Commit");
 
