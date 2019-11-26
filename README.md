@@ -58,3 +58,17 @@ The final design includes the following features:
 - The line graph displaying coverage was added as a result of feedback from user acceptance testing, to improve legibility over large numbers of commits
 - Being able to hover the mouse over the bar graphs to give exact results is useful (seen in the User test video).
 - User acceptance testing revealed that the number of passing tests/total number of tests and runtime of test suite/total number of tests graphs were helpful: users indicated that they could see if not enough tests were being added at certain milestones in the project lifetime, or if too many tests were being added at once, potentially impacting performance
+
+## Sample Screenshots
+
+### Test Status
+![Test Status](./photos/test-status.png)
+
+### Coverage Bar Chart
+![Coverage Bar Chart](./photos/coverage-bar.png)
+
+### Coverage Line Chart
+![Coverage Line Chart](./photos/coverage-line.png)
+
+### Test Runtime
+![Test Runtime](./photos/test-runtime.png)
